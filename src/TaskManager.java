@@ -45,10 +45,4 @@ public class TaskManager {
             }
         }
     }
-
-    public void printSubtasks(Epic epic) {
-        for (Subtask subtask : epic.getSubtasks()) {
-            System.out.println("Подзадача: " + subtask.getName() + ", Статус: " + subtask.getStatus());
-        }
-    }
 }

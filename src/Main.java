@@ -11,13 +11,21 @@ public class Main {
         manager.addTask(task1);
         manager.addTask(task2);
 
-        Epic epic = new Epic("Название Эпика", "Описание Эпика");
-        manager.addTask(epic);
+        Epic epic1 = new Epic("Название Эпика 1", "Описание Эпика 1");
+        manager.addTask(epic1);
 
-        Subtask subtask1 = new Subtask("Название Подзадачи 1", "Описание Подзадачи 1", epic);
-        Subtask subtask2 = new Subtask("Название Подзадачи 2", "Описание Подзадачи 2", epic);
-        epic.addSubtask(subtask1);
-        epic.addSubtask(subtask2);
+        Subtask subtask1 = new Subtask("Название Подзадачи 1", "Описание Подзадачи 1", epic1);
+        Subtask subtask2 = new Subtask("Название Подзадачи 2", "Описание Подзадачи 2", epic1);
+        epic1.addSubtask(subtask1);
+        epic1.addSubtask(subtask2);
+
+        Epic epic2 = new Epic("Название Эпика 2", "Описание Эпика 2");
+        manager.addTask(epic2);
+
+        Subtask subtask3 = new Subtask("Название Подзадачи 4", "Описание Подзадачи 4", epic2);
+        Subtask subtask4 = new Subtask("Название Подзадачи 5", "Описание Подзадачи 5", epic2);
+        epic2.addSubtask(subtask3);
+        epic2.addSubtask(subtask4);
 
         manager.printAllTasks();
 
@@ -30,14 +38,16 @@ public class Main {
         System.out.println("\nНайденная задача: " + foundTask);
 
         // Обновление статусов подзадач, чтобы статус эпика тоже изменился
-        List<Subtask> updatedSubtasks = Arrays.asList(
-                new Subtask("Измененное название Подзадачи 1", "Измененное описание Подзадачи 1", epic),
-                new Subtask("Новая Подзадача", "Описание новой подзадачи", epic)
-        );
-        epic.setSubtasks(updatedSubtasks);
+        subtask1.setStatus(Status.DONE);
+        subtask2.setStatus(Status.DONE);
+        epic1.updateEpicStatus();
 
         // Удаление одной задачи по идентификатору
         manager.removeTask(task2.getId());
+
+        // Проверка, что произошло обновление одной из задач,
+        // обновление статуса эпика, удаление одной задачи по идентификатору
+        manager.printAllTasks();
 
         // Удаление всех задач
         manager.deleteAllTasks();

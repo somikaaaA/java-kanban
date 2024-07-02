@@ -12,24 +12,24 @@ public class Epic extends Task {
         updateEpicStatus(); // Автоматическое обновление статуса эпика
     }
 
-    public List<Subtask> getSubtasks() {
-        return subtasks;
-    }
+//    public List<Subtask> getSubtasks() {
+//        return subtasks;
+//    }
 
     // Метод для вывода всех подзадач
     public void printSubtasks() {
         for (Task subtask : subtasks) {
-            System.out.println("Name: " + subtask.getName() + ", Description: " + subtask.getDescription() + ", Статус: " + subtask.getStatus());
+            System.out.println("ID: " + subtask.getId() + ", Name: " + subtask.getName() + ", Description: " + subtask.getDescription() + ", Status: " + subtask.getStatus());
         }
     }
 
-    public void setSubtasks(List<Subtask> subtasks) {
-        this.subtasks.clear();
-        this.subtasks.addAll(subtasks);
-        updateEpicStatus(); // После добавления подзадач обновляем статус эпика
-    }
+//    public void setSubtasks(List<Subtask> subtasks) {
+//        this.subtasks.clear();
+//        this.subtasks.addAll(subtasks);
+//        updateEpicStatus(); // После добавления подзадач обновляем статус эпика
+//    }
 
-    private void updateEpicStatus() {
+    public void updateEpicStatus() {
         boolean allDone = true;
         for (Subtask subtask : subtasks) {
             if (subtask.getStatus()!= Status.DONE) {
