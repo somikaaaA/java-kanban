@@ -1,13 +1,13 @@
+package model;
 
 public class Task {
-
     protected int id;
     protected String name;
     protected String description;
     protected Status status;
 
     public Task(String name, String description) {
-        this.id = generateNextId();
+        this.id = -1; // Инициализируем с некорректным значением, чтобы проверить корректность генерации ID
         this.name = name;
         this.description = description;
         this.status = Status.NEW;
@@ -33,16 +33,16 @@ public class Task {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Status getStatus() {
         return status;
     }
 
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    protected static int generateNextId() {
-        return Counter.nextId();
     }
 
     @Override
