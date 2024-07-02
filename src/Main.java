@@ -1,64 +1,53 @@
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         TaskManager manager = TaskManager.getInstance();
 
-        // Создание задач
+        // 1) Создание задач, эпиков и подзадач, добавление их в список и вывод всех задач
         Task task1 = new Task("Название задачи 1", "Описание задачи 1");
         Task task2 = new Task("Название задачи 2", "Описание задачи 2");
-
-        // Добавление задач
         manager.addTask(task1);
         manager.addTask(task2);
 
-        // Вывод списка всех задач
-        System.out.println("Список всех задач:");
-        for (Task task : manager.getAllTasks()) {
-            System.out.println(task);
-        }
-
-        // Создание эпика
         Epic epic = new Epic("Название Эпика", "Описание Эпика");
-
-        // Добавление эпика
         manager.addTask(epic);
 
-        // Вывод списка всех задач (включая эпик)
-        System.out.println("\nСписок всех задач (включая эпик):");
-        for (Task task : manager.getAllTasks()) {
-            System.out.println(task);
-        }
+        Subtask subtask1 = new Subtask("Название Подзадачи 1", "Описание Подзадачи 1", epic);
+        Subtask subtask2 = new Subtask("Название Подзадачи 2", "Описание Подзадачи 2", epic);
+        epic.addSubtask(subtask1);
+        epic.addSubtask(subtask2);
 
-        // Создание подзадачи
-        Subtask subtask = new Subtask("Название Подзадачи", "Описание Подзадачи", epic);
+        Task task3 = new Task("Название задачи 3", "Описание задачи 3");
+        Task task4 = new Task("Название задачи 4", "Описание задачи 4");
+        manager.addTask(task3);
+        manager.addTask(task4);
 
-        // Добавление подзадачи к эпику
-        epic.addSubtask(subtask);
+        manager.printAllTasks();
 
-        // Вывод списка всех подзадач определенного эпика
-        System.out.println("\nСписок всех подзадач определенного эпика:");
-        List<Subtask> subtasks = epic.getSubtasks();
-        for (Subtask sub : subtasks) {
-            System.out.println(sub);
-        }
+        // 2) Обновление одной из задач
+        task1.setName("Новое название задачи 1");
+        manager.updateTask(task1);
 
-        // Обновление статуса задачи
-        int indexToUpdate1 = 1; // Индекс задачи, которую мы хотим обновить
-        task1.setStatus(Status.IN_PROGRESS);
-        System.out.println("\nСтатус задачи №" + (indexToUpdate1) + " обновлен до: " + task1.getStatus());
+        // 3) Получение задачи по идентификатору
+        Task foundTask = manager.getTaskById(task1.getId());
+        System.out.println("\nНайденная задача: " + foundTask);
 
-        int indexToUpdate2 = 2; // Индекс задачи, которую мы хотим обновить
-        task2.setStatus(Status.DONE);
-        System.out.println("\nСтатус задачи №" + (indexToUpdate2) + " обновлен до: " + task1.getStatus());
+        // 4) Обновление статусов подзадач, чтобы статус эпика тоже изменился
+        List<Subtask> updatedSubtasks = Arrays.asList(
+                new Subtask("Измененное название Подзадачи 1", "Измененное описание Подзадачи 1", epic),
+                new Subtask("Новая Подзадача", "Описание новой подзадачи", epic)
+        );
+        epic.setSubtasks(updatedSubtasks);
 
-        // Удаление задачи по идентификатору
+        // 5) Удаление одной задачи по идентификатору
         manager.removeTask(task2.getId());
-        System.out.println("\nЗадача с ID " + task2.getId() + " удалена.");
 
-        // Попытка удаления несуществующей задачи
-        manager.removeTask(task1.getId());
-        System.out.println("\nПопытка удаления несуществующей задачи с ID " + task1.getId() + ". Результат: " + (manager.getTaskById(task1.getId()) == null));
+        // 6) Удаление всех задач
+        manager.deleteAllTasks();
+
+        // Проверка, что все задачи были удалены
+        manager.printAllTasks();
     }
 }
-

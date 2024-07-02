@@ -1,12 +1,17 @@
 public class Subtask extends Task {
-    public final Epic epic;
+    private Epic parentEpic;
 
-    public Subtask(String name, String description, Epic epic) {
+    public Subtask(String name, String description, Epic parentEpic) {
         super(name, description);
-        this.epic = epic;
+        this.parentEpic = parentEpic;
     }
 
-//    public Epic getEpic() {
-//        return epic;
+//    public Epic getParentEpic() {
+//        return parentEpic;
 //    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", Parent Epic: " + (parentEpic!= null? parentEpic.getName() : "None");
+    }
 }

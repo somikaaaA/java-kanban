@@ -13,10 +13,6 @@ public class TaskManager {
         return instance;
     }
 
-//    public int getId() {
-//        return Counter.nextId();
-//    }
-
     public void addTask(Task task) {
         tasks.put(task.getId(), task);
     }
@@ -25,20 +21,35 @@ public class TaskManager {
         return tasks.get(id);
     }
 
-    public List<Task> getAllTasks() {
-        return new ArrayList<>(tasks.values());
-    }
-
+    //Метод для удаления задачи по идентификатору
     public void removeTask(int id) {
         tasks.remove(id);
     }
 
-//    public List<Subtask> getSubtasksOfEpic(int epicId) {
-//        Epic epic = (Epic) getTaskById(epicId);
-//        if (epic!= null) {
-//            return epic.getSubtasks();
-//        } else {
-//            return Collections.emptyList();
-//        }
-//    }
+    //Метод для обновления задачи
+    public void updateTask(Task updatedTask) {
+        if (!tasks.containsKey(updatedTask.getId())) {
+            System.err.println("\nЗадача с указанным ID не найдена.");
+            return;
+        }
+
+        tasks.replace(updatedTask.getId(), updatedTask);
+        System.out.println("\nЗадача с ID " + updatedTask.getId() + " успешно обновлена.");
+    }
+
+    //Метод для удаления всех задач
+    public void deleteAllTasks() {
+        tasks.clear();
+        System.out.println("\nВсе задачи успешно удалены.");
+    }
+
+    //Метод для вывода всех задач
+    public void printAllTasks() {
+        System.out.println("\nСписок всех задач");
+        for (Task task : tasks.values()) {
+            System.out.println(task);
+        }
+    }
+
+
 }
