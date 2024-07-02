@@ -12,9 +12,16 @@ public class Epic extends Task {
         updateEpicStatus(); // Автоматическое обновление статуса эпика
     }
 
-//    public List<Subtask> getSubtasks() {
-//        return subtasks;
-//    }
+    public List<Subtask> getSubtasks() {
+        return subtasks;
+    }
+
+    // Метод для вывода всех подзадач
+    public void printSubtasks() {
+        for (Task subtask : subtasks) {
+            System.out.println("Name: " + subtask.getName() + ", Description: " + subtask.getDescription() + ", Статус: " + subtask.getStatus());
+        }
+    }
 
     public void setSubtasks(List<Subtask> subtasks) {
         this.subtasks.clear();
@@ -38,13 +45,18 @@ public class Epic extends Task {
         }
     }
 
+//    @Override
+//    public String toString() {
+//        StringBuilder sb = new StringBuilder(super.toString());
+//        sb.append(", Subtasks: ");
+//        for (Subtask subtask : subtasks) {
+//            sb.append(subtask.getName()).append(", ");
+//        }
+//        return sb.toString();
+//    }
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(super.toString());
-        sb.append(", Subtasks: ");
-        for (Subtask subtask : subtasks) {
-            sb.append(subtask.getName()).append(", ");
-        }
-        return sb.toString();
+        return super.toString() + ", Number of Subtasks: " + subtasks.size();
     }
 }
