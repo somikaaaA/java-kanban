@@ -3,6 +3,7 @@ import model.Task;
 import model.Subtask;
 import model.Epic;
 import model.Status;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -37,25 +38,31 @@ public class Main {
         }
 
         // Создание подзадачи
-        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", epic1);
-        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", epic1);
-        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", epic2);
-        Subtask subtask4 = new Subtask("Подзадача 4", "Описание подзадачи 4", epic2);
+        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", 3);
+        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", 3);
+        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", 4);
+        Subtask subtask4 = new Subtask("Подзадача 4", "Описание подзадачи 4", 4);
 
         manager.addNewSubtask(subtask1);
         manager.addNewSubtask(subtask2);
         manager.addNewSubtask(subtask3);
         manager.addNewSubtask(subtask4);
 
-        // Получение всех подзадач
-        System.out.println("\nСписок подзадач:");
-        for (Subtask subtask : manager.getSubtasks()) {
-            System.out.println(subtask);
-        }
+        /// Получение списка всех эпиков
+        ArrayList<Epic> allEpics = manager.getEpics();
 
-        // Получение задачи по ID
-        Task retrievedTask = manager.getTaskById(task1.getId());
-        System.out.println("\nЗадача с ID " + task1.getId() + " получена: " + retrievedTask);
+// Перебираем все эпики и выводим их подзадачи
+        for (Epic epic : allEpics) {
+            ArrayList<Subtask> subtasks = manager.getEpicSubtasks(epic.getId());
+            if (subtasks != null && !subtasks.isEmpty()) {
+                System.out.println("Подзадачи для эпика с ID " + epic.getId() + ":");
+                for (Subtask subtask : subtasks) {
+                    System.out.println(subtask);
+                }
+            } else {
+                System.out.println("Нет подзадач для эпика с ID " + epic.getId());
+            }
+        }
 
         // Обновление задачи
         task1.setName("Обновленная задача 1");
@@ -67,10 +74,10 @@ public class Main {
         System.out.println("Задача с ID " + task2.getId() + " удалена.");
 
         // Обновление статуса подзадач на DONE
-        subtask3.setStatus(Status.DONE);
-        subtask4.setStatus(Status.DONE);
+        subtask1.setStatus(Status.DONE);
+        subtask2.setStatus(Status.DONE);
         // Обновление статуса эпика по его ID
-        manager.updateEpicStatusByEpicId(epic1.getId());
+        manager.updateEpicStatus(epic1.getId());
         System.out.println("Статус эпика с ID: " + epic1.getId() + " обновлен.");
         // Вывод статуса эпика
         System.out.println("Статус эпика с ID: " + epic1.getId() + ": " + epic1.getStatus());
@@ -79,9 +86,9 @@ public class Main {
         manager.deleteTasks();
         System.out.println("\nВсе задачи были удалены");
 
-        // Удаление всех эпиков и подзадач
+        // Удаление всех подзадач
         manager.deleteAllEpicsAndSubtasks();
-        System.out.println("Все эпики и подзадачи удалены");
+        System.out.println("Все подзадачи удалены");
 
         // Проверяем, что все элементы были удалены
         for (Task task : manager.getTasks()) {
