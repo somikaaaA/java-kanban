@@ -1,22 +1,27 @@
 package model;
 
-import controllers.TaskManager;
+import controllers.InMemoryTaskManager;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    private final List<Integer> subtaskIds = new ArrayList<>();
+    protected final List<Integer> subtaskIds = new ArrayList<>();
 
     public Epic(String name, String description) {
         super(name, description);
     }
+
+//    private InMemoryTaskManager inMemoryTaskManager;
+//
+//    public void setInMemoryTaskManager(InMemoryTaskManager inMemoryTaskManager) {
+//        this.inMemoryTaskManager = inMemoryTaskManager;
+//    }
 
     public void addSubtaskId(int subtaskId) {
         subtaskIds.add(subtaskId);
     }
 
     public void addSubtask(Subtask subtask) {
-        //subtasks.add(subtask);
         subtaskIds.add(subtask.getId());
     }
 
@@ -27,7 +32,7 @@ public class Epic extends Task {
     public void updateEpicStatus() {
         boolean allDone = true;
         for (int subtaskId : subtaskIds) {
-            Subtask subtask = TaskManager.getSubtaskById(subtaskId); // Использование статического метода
+            Subtask subtask = InMemoryTaskManager.getSubtaskById(subtaskId); // Использование статического метода
             if (subtask != null && subtask.getStatus() != Status.DONE) {
                 allDone = false;
                 break;
@@ -44,7 +49,7 @@ public class Epic extends Task {
     public List<Subtask> getSubtasks() {
         List<Subtask> subtasks = new ArrayList<>();
         for (int subtaskId : subtaskIds) {
-            Subtask subtask = TaskManager.getSubtaskById(subtaskId); // Использование статического метода
+            Subtask subtask = InMemoryTaskManager.getSubtaskById(subtaskId); // Использование статического метода
             if (subtask != null) {
                 subtasks.add(subtask);
             }

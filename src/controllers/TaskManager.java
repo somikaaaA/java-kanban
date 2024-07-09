@@ -1,117 +1,43 @@
 package controllers;
 
-import model.Task;
-import model.Subtask;
 import model.Epic;
+import model.Subtask;
+import model.Task;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class TaskManager {
-    private static HashMap<Integer, Task> tasks = new HashMap<>();
-    private static HashMap<Integer, Epic> epics = new HashMap<>();
-    private static HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private int generatorId = 0;
+public interface TaskManager {
+    int addNewTask(Task task);
 
-    public TaskManager() {}
+    int addNewEpic(Epic epic);
 
-    public static Subtask getSubtaskById(int id) {
-        return subtasks.get(id);
-    }
-
-    public int addNewTask(Task task) {
-        final int id = ++generatorId;
-        task.setId(id);
-        tasks.put(id, task);
-        return id;
-    }
-
-    public int addNewEpic(Epic epic) {
-        final int id = ++generatorId;
-        epic.setId(id);
-        epics.put(id, epic);
-        return id;
-    }
-
-    public Integer addNewSubtask(Subtask subtask) {
-        final int epicId = subtask.getEpicId();
-        Epic epic = epics.get(epicId);
-        if (epic == null) {
-            return null;
-        }
-        final int id = ++generatorId;
-        subtask.setId(id);
-        subtasks.put(id, subtask);
-        epic.addSubtaskId(subtask.getId());
-        updateEpicStatus(epicId);
-        return id;
-    }
+    Integer addNewSubtask(Subtask subtask);
 
     // Получение списка всех задач
-    public ArrayList<Task> getTasks() {
-        return new ArrayList<>(tasks.values());
-    }
+    ArrayList<Task> getTasks();
 
-    public ArrayList<Subtask> getSubtasks() {
-        ArrayList<Subtask> tasks = new ArrayList<>(subtasks.values());
-        return tasks;
-    }
+    ArrayList<Subtask> getSubtasks();
 
-    public ArrayList<Epic> getEpics() {
-        ArrayList<Epic> tasks = new ArrayList<>(epics.values());
-        return tasks;
-    }
+    ArrayList<Epic> getEpics();
 
     // Удаление всех задач
-    public void deleteTasks() {
-        tasks.clear();
-    }
+    void deleteTasks();
 
-    public void deleteAllEpicsAndSubtasks() {
-        epics.clear();
-        subtasks.clear();
-    }
+    void deleteAllEpicsAndSubtasks();
 
-    public void deleteSubtasks() {
-        for (Epic epic : epics.values()) {
-            epic.cleanSubtaskIds();
-            updateEpicStatus(epic.getId());
-        }
-        subtasks.clear();
-    }
+    void deleteSubtasks();
 
     // Получение по идентификатору
-    public Task getTaskById(int id) {
-        return tasks.get(id);
-    }
+    Task getTaskById(int id);
 
     // Обновление
-    public void updateTask(Task updatedTask) {
-        tasks.put(updatedTask.getId(), updatedTask);
-    }
+    void updateTask(Task updatedTask);
 
     // Удаление по идентификатору
-    public void deleteTaskById(int id) {
-        tasks.remove(id);
-    }
+    void deleteTaskById(int id);
 
     // Получение списка всех подзадач определенного эпика
-    public ArrayList<Subtask> getEpicSubtasks(int epicId) {
-        ArrayList<Subtask> tasks = new ArrayList<>();
-        Epic epic = epics.get(epicId);
-        if (epic == null) {
-            return null;
-        }
-        for (int id : epic.getSubtaskIds()) {
-            tasks.add(subtasks.get(id));
-        }
-        return tasks;
-    }
+    ArrayList<Subtask> getEpicSubtasks(int epicId);
 
-    public void updateEpicStatus(int epicId) {
-        Epic epic = epics.get(epicId);
-        if (epic!= null) {
-            epic.updateEpicStatus();
-        }
-    }
+    void updateEpicStatus(int epicId);
 }

@@ -1,4 +1,4 @@
-import controllers.TaskManager;
+import controllers.InMemoryTaskManager;
 import model.Task;
 import model.Subtask;
 import model.Epic;
@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager manager = new TaskManager();
+        InMemoryTaskManager manager = new InMemoryTaskManager();
 
         // Создание задач
         Task task1 = new Task("Задача 1", "Описание задачи 1");
