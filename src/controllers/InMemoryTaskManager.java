@@ -11,6 +11,7 @@ public class InMemoryTaskManager implements TaskManager {
     private static HashMap<Integer, Task> tasks = new HashMap<>();
     private static HashMap<Integer, Epic> epics = new HashMap<>();
     private static HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private final ArrayList<Task> history = new ArrayList<>();
     private int generatorId = 0;
 
     public InMemoryTaskManager() {}
@@ -91,8 +92,22 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Получение по идентификатору
     @Override
-    public Task getTaskById(int id) {
+    public Task getTask(int id) {
         return tasks.get(id);
+    }
+
+    @Override
+    public Task getSubtask(int id) {
+        Task task = tasks.get(id);
+        history.add(task); // Добавляем задачу в историю
+        return task;
+    }
+
+    @Override
+    public Task getEpic(int id) {
+        Task task = tasks.get(id);
+        history.add(task); // Добавляем задачу в историю
+        return task;
     }
 
     // Обновление
@@ -127,5 +142,14 @@ public class InMemoryTaskManager implements TaskManager {
         if (epic!= null) {
             epic.updateEpicStatus();
         }
+    }
+
+    @Override
+    public ArrayList<Task> getHistory() {
+        // Ограничиваем размер истории до последних 10 просмотров
+        if (history.size() > 10) {
+            history.subList(0, 10).clear(); // Очищаем старые записи
+        }
+        return history;
     }
 }

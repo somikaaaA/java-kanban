@@ -11,12 +11,6 @@ public class Epic extends Task {
         super(name, description);
     }
 
-//    private InMemoryTaskManager inMemoryTaskManager;
-//
-//    public void setInMemoryTaskManager(InMemoryTaskManager inMemoryTaskManager) {
-//        this.inMemoryTaskManager = inMemoryTaskManager;
-//    }
-
     public void addSubtaskId(int subtaskId) {
         subtaskIds.add(subtaskId);
     }

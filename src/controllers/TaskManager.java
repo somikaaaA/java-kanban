@@ -28,7 +28,11 @@ public interface TaskManager {
     void deleteSubtasks();
 
     // Получение по идентификатору
-    Task getTaskById(int id);
+    Task getTask(int id);
+
+    Task getSubtask(int id);
+
+    Task getEpic(int id);
 
     // Обновление
     void updateTask(Task updatedTask);
@@ -40,4 +44,6 @@ public interface TaskManager {
     ArrayList<Subtask> getEpicSubtasks(int epicId);
 
     void updateEpicStatus(int epicId);
+
+    ArrayList<Task> getHistory();
 }
