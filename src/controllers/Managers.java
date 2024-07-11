@@ -1,8 +1,5 @@
 package controllers;
 
-//import controllers.HistoryManager;
-//import controllers.InMemoryHistoryManager;
-
 public class Managers {
     private Managers() {}
 

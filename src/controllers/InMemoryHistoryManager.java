@@ -9,7 +9,14 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        history.add(task);
+        if (task != null) {
+            if (history.size() >= 10) {
+                history.remove(0);
+            }
+            history.add(task);
+        } else {
+            System.out.println("Невозможно добавить null в историю");
+        }
     }
 
     @Override

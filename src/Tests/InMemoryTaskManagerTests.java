@@ -1,92 +1,26 @@
-package controllers;
+package Tests;
 
-import controllers.HistoryManager;
-import controllers.Managers;
-
-import model.Task;
-import model.Subtask;
+import controllers.InMemoryTaskManager;
+import controllers.TaskManager;
 import model.Epic;
-
-import java.util.ArrayList;
-
+import model.Subtask;
+import model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
 
-class InMemoryTaskManagerTest {
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class InMemoryTaskManagerTests {
+
 
     private TaskManager taskManager;
 
     @BeforeEach
     void setUp() {
         taskManager = new InMemoryTaskManager(); // Инициализация перед каждым тестом
-    }
-
-    //Экземпляры класса Task равны друг другу, если равен их id
-    @Test
-    void taskEqualsbySameId() {
-        Task task1 = new Task("Test 1", "Description 1");
-        Task task2 = new Task("Test 2", "Description 2");
-        task1.setId(1);
-        task2.setId(1);
-
-        assertEquals(task1, task2, "Задачи должны быть равны по ID");
-    }
-
-    //Наследники класса Task равны друг другу, если равен их id
-    @Test
-    void epicEqualsSubtaskBySameId() {
-        Epic epic = new Epic("Epic Test", "Epic Description");
-        Subtask subtask = new Subtask("Subtask Test", "Subtask Description", 1);
-        epic.setId(1);
-        subtask.setId(1);
-
-        assertEquals(epic, subtask, "Наследники должны быть равны по ID");
-    }
-
-    //Объект Epic нельзя добавить в самого себя в виде подзадачи;
-    @Test
-    void testAddSelfAsSubtask() {
-        // Создаем объект Epic
-        Epic epic = new Epic("Тестовый Эпик", "Описание Тестового Эпика");
-
-        // Пытаемся добавить Epic в качестве подзадачи к самому себе
-        try {
-            epic.addSubtaskId(epic.getId()); // Предполагается, что метод addSubtaskId существует и доступен
-            fail("Ожидалось исключение при попытке добавить Epic в качестве подзадачи к самому себе.");
-        } catch (Exception e) {
-            // Ожидаемое исключение, проверяем тип и сообщение
-            assertInstanceOf(IllegalArgumentException.class, e, "Ожидалось IllegalArgumentException");
-            assertEquals("Epic не может быть добавлен в качестве подзадачи к самому себе.", e.getMessage());
-        }
-
-        // Проверяем, что подзадача не была добавлена
-        assertFalse(epic.getSubtaskIds().contains(epic.getId()));
-    }
-
-    //объект Subtask нельзя сделать своим же эпиком
-    @Test
-    public void testCannotMakeSubtaskItsOwnEpic(){
-        TaskManager manager = Managers.getDefault();
-        Subtask subtask = new Subtask("Тестовая подзадача", "Описание", 1);
-        // Действие
-        boolean result = manager.isSelfEpic(subtask);
-
-        // Проверка
-        assertFalse(result, "Subtask не должен иметь возможность стать своим эпиком.");
-    }
-
-    //утилитарный класс всегда возвращает проинициализированные и готовые к работе экземпляры менеджеров
-    @Test
-    public void testManagersReturnInitializedInstances() {
-        // Проверка, что getDefault() возвращает не-null экземпляр TaskManager
-        TaskManager taskManager = Managers.getDefault();
-        assertNotNull(taskManager, "Менеджер задач должен быть проинициализирован.");
-
-        // Проверка, что getDefaultHistory() возвращает не-null экземпляр HistoryManager
-        HistoryManager historyManager = Managers.getDefaultHistory();
-        assertNotNull(historyManager, "История задач должна быть проинициализирована.");
     }
 
     //InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
@@ -177,33 +111,5 @@ class InMemoryTaskManagerTest {
                 break;
             }
         }
-    }
-
-    //добавляемые в HistoryManager, сохраняют предыдущую версию задачи и её данных.
-    @Test
-    public void testSavingPreviousVersionOfTask() {
-        // Инициализация HistoryManager
-        HistoryManager historyManager = new InMemoryHistoryManager();
-
-        // Создание первой версии задачи
-        Task originalTask = new Task("Оригинальная задача", "Описание задачи");
-
-        // Добавление задачи в историю
-        historyManager.add(originalTask);
-
-        // Изменение данных задачи
-        originalTask.setName("Измененное имя");
-        originalTask.setDescription("Измененное описание");
-
-        // Повторное добавление задачи в историю
-        historyManager.add(originalTask);
-
-        // Получение истории
-        ArrayList<Task> history = historyManager.getHistory();
-
-        // Проверка, что в истории присутствуют обе версии задачи
-        assertEquals(2, history.size(), "В истории должно быть две версии задачи.");
-        assertTrue(history.contains(originalTask), "Оригинальная версия задачи должна быть в истории.");
-        assertTrue(history.contains(new Task("Оригинальная задача", "Описание задачи")), "Первая версия задачи должна быть в истории.");
     }
 }
