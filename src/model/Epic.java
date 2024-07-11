@@ -15,9 +15,9 @@ public class Epic extends Task {
         subtaskIds.add(subtaskId);
     }
 
-    public void addSubtask(Subtask subtask) {
-        subtaskIds.add(subtask.getId());
-    }
+//    public void addSubtask(Subtask subtask) {
+//        subtaskIds.add(subtask.getId());
+//    }
 
     public void cleanSubtaskIds() {
         subtaskIds.clear();
@@ -38,17 +38,6 @@ public class Epic extends Task {
         } else {
             setStatus(Status.IN_PROGRESS);
         }
-    }
-
-    public List<Subtask> getSubtasks() {
-        List<Subtask> subtasks = new ArrayList<>();
-        for (int subtaskId : subtaskIds) {
-            Subtask subtask = InMemoryTaskManager.getSubtaskById(subtaskId); // Использование статического метода
-            if (subtask != null) {
-                subtasks.add(subtask);
-            }
-        }
-        return subtasks;
     }
 
     // Метод для получения списка ID подзадач

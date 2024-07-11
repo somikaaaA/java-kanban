@@ -4,14 +4,13 @@ import model.Task;
 import model.Subtask;
 import model.Epic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     private static HashMap<Integer, Task> tasks = new HashMap<>();
     private static HashMap<Integer, Epic> epics = new HashMap<>();
     private static HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    private final ArrayList<Task> history = new ArrayList<>();
+    private final HistoryManager historyManager = Managers.getDefaultHistory();
     private int generatorId = 0;
 
     public InMemoryTaskManager() {}
@@ -93,20 +92,22 @@ public class InMemoryTaskManager implements TaskManager {
     // Получение по идентификатору
     @Override
     public Task getTask(int id) {
-        return tasks.get(id);
+        Task task = tasks.get(id);
+        historyManager.add(task);
+        return task;
     }
 
     @Override
     public Task getSubtask(int id) {
         Task task = tasks.get(id);
-        history.add(task); // Добавляем задачу в историю
+        historyManager.add(task);
         return task;
     }
 
     @Override
     public Task getEpic(int id) {
         Task task = tasks.get(id);
-        history.add(task); // Добавляем задачу в историю
+        historyManager.add(task);
         return task;
     }
 
@@ -146,10 +147,24 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Task> getHistory() {
-        // Ограничиваем размер истории до последних 10 просмотров
-        if (history.size() > 10) {
-            history.subList(0, 10).clear(); // Очищаем старые записи
+        return historyManager.getHistory();
+    }
+
+    @Override
+    public boolean isSelfEpic(Subtask subtask) {
+        // Получаем список ID подзадач текущего эпика
+        List<Object> currentEpicSubtasks = getCurrentEpicSubtasks(subtask.getEpicId());
+
+        // Проверяем, содержится ли ID подзадачи в списке ID подзадач текущего эпика
+        return currentEpicSubtasks.contains(subtask.getId());
+    }
+
+    // Метод для получения списка ID подзадач текущего эпика
+    private List<Object> getCurrentEpicSubtasks(int epicId) {
+        Epic epic = epics.get(epicId);
+        if (epic == null) {
+            return Collections.emptyList(); // Возвращаем пустой список, если эпик не найден
         }
-        return history;
+        return new ArrayList<>(epic.getSubtaskIds()); // Возвращаем список ID подзадач эпика
     }
 }

@@ -46,4 +46,6 @@ public interface TaskManager {
     void updateEpicStatus(int epicId);
 
     ArrayList<Task> getHistory();
+
+    boolean isSelfEpic(Subtask subtask);
 }
