@@ -12,8 +12,8 @@ public class TaskTests {
     //Экземпляры класса Task равны друг другу, если равен их id
     @Test
     void taskEqualsbySameId() {
-        Task task1 = new Task("Test 1", "Description 1");
-        Task task2 = new Task("Test 2", "Description 2");
+        Task task1 = new Task("Test 1", "Описание 1");
+        Task task2 = new Task("Test 2", "Описание 2");
         task1.setId(1);
         task2.setId(1);
 

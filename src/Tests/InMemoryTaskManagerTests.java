@@ -11,10 +11,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InMemoryTaskManagerTests {
-
 
     private TaskManager taskManager;
 
@@ -26,30 +24,25 @@ public class InMemoryTaskManagerTests {
     //InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
     @Test
     public void testAddAndGetTasksByType() {
-        // Добавляем задачу
         Task task = new Task("Задача 1", "Описание задачи 1");
         int taskId = taskManager.addNewTask(task);
-        assertEquals(taskId, task.getId(), "ID задачи после добавления должен совпадать с заданным ID.");
 
-        // Добавляем подзадачу
         Subtask subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", 1);
         int subtaskId = taskManager.addNewSubtask(subtask);
-        assertEquals(subtaskId, subtask.getId(), "ID подзадачи после добавления должен совпадать с заданным ID.");
 
-        // Добавляем эпик
         Epic epic = new Epic("Эпик 1", "Описание эпика 1");
         int epicId = taskManager.addNewEpic(epic);
+
+        assertEquals(taskId, task.getId(), "ID задачи после добавления должен совпадать с заданным ID.");
+        assertEquals(subtaskId, subtask.getId(), "ID подзадачи после добавления должен совпадать с заданным ID.");
         assertEquals(epicId, epic.getId(), "ID эпика после добавления должен совпадать с заданным ID.");
 
-        // Проверяем наличие задачи в коллекции задач
         ArrayList<Task> allTasks = taskManager.getTasks();
         assertTrue(allTasks.contains(task), "Задача должна быть найдена в коллекции задач.");
 
-        // Проверяем наличие подзадачи в коллекции подзадач
         ArrayList<Subtask> allSubtasks = taskManager.getSubtasks();
         assertTrue(allSubtasks.contains(subtask), "Подзадача должна быть найдена в коллекции подзадач.");
 
-        // Проверяем наличие эпика в коллекции эпиков
         ArrayList<Epic> allEpics = taskManager.getEpics();
         assertTrue(allEpics.contains(epic), "Эпик должен быть найден в коллекции эпиков.");
     }

@@ -121,6 +121,25 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTaskById(int id) {
         tasks.remove(id);
+        historyManager.remove(id); // Удаляем задачу из истории просмотров
+    }
+
+    @Override
+    public void deleteSubtaskById(int id) {
+        Subtask subtask = subtasks.remove(id);
+        if (subtask != null) {
+            historyManager.remove(id); // Удаляем задачу из истории просмотров
+            // Дополнительная проверка, чтобы убедиться, что ID не остался в подзадачах эпиков
+            for (Epic epic : epics.values()) {
+                epic.getSubtaskIds().remove(Integer.valueOf(id)); // Удаляем ID подзадачи из списка эпика
+            }
+        }
+    }
+
+    @Override
+    public void deleteEpicById(int id) {
+        epics.remove(id);
+        historyManager.remove(id); // Удаляем задачу из истории просмотров
     }
 
     // Получение списка всех подзадач определенного эпика
@@ -142,12 +161,14 @@ public class InMemoryTaskManager implements TaskManager {
         Epic epic = epics.get(epicId);
         if (epic!= null) {
             epic.updateEpicStatus();
+            // Очистка неактуальных ID подзадач
+            epic.cleanSubtaskIds();
         }
     }
 
     @Override
     public ArrayList<Task> getHistory() {
-        return historyManager.getHistory();
+        return new ArrayList<>(historyManager.getHistory()); // Преобразование List в ArrayList
     }
 
     @Override
