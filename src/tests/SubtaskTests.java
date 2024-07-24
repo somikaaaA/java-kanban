@@ -1,4 +1,4 @@
-package Tests;
+package tests;
 
 import controllers.InMemoryTaskManager;
 import model.Subtask;

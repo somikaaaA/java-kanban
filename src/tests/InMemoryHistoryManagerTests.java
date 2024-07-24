@@ -1,4 +1,4 @@
-package Tests;
+package tests;
 
 import controllers.InMemoryHistoryManager;
 import model.Task;
