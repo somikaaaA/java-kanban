@@ -13,7 +13,9 @@ public class InMemoryTaskManager implements TaskManager {
     private final HistoryManager historyManager = Managers.getDefaultHistory();
     private int generatorId = 0;
 
-    public InMemoryTaskManager() {}
+    public InMemoryTaskManager() {
+
+    }
 
     public static Subtask getSubtaskById(int id) {
         return subtasks.get(id);
@@ -159,7 +161,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateEpicStatus(int epicId) {
         Epic epic = epics.get(epicId);
-        if (epic!= null) {
+        if (epic != null) {
             epic.updateEpicStatus();
             // Очистка неактуальных ID подзадач
             epic.cleanSubtaskIds();
