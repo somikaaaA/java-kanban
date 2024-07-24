@@ -2,7 +2,6 @@ package controllers;
 
 import model.Task;
 import java.util.HashMap;
-//import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
@@ -12,9 +11,6 @@ public class InMemoryHistoryManager implements HistoryManager {
     private Node head;
     private Node tail;
     private Map<Integer, Node> nodeMap = new HashMap<>();
-
-    //private final Map<Integer, Task> historyMap = new HashMap<>();
-    //private final LinkedHashMap<Integer, Task> linkedHistoryMap = new LinkedHashMap<>();
 
     @Override
     public void add(Task task) {

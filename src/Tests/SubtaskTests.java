@@ -1,7 +1,6 @@
 package Tests;
 
 import controllers.InMemoryTaskManager;
-import controllers.Managers;
 import model.Subtask;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +10,7 @@ public class SubtaskTests {
 
     //объект Subtask нельзя сделать своим же эпиком
     @Test
-    public void testCannotMakeSubtaskItsOwnEpic(){
+    public void testCannotMakeSubtaskItsOwnEpic() {
         InMemoryTaskManager manager = new InMemoryTaskManager();
         Subtask subtask = new Subtask("Тестовая подзадача", "Описание", 1);
 
