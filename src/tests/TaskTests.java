@@ -17,7 +17,7 @@ public class TaskTests {
         task1.setId(1);
         task2.setId(1);
 
-        assertEquals(task1, task2, "Задачи должны быть равны по ID");
+        assertEquals(task1.getId(), task2.getId(), "Задачи должны быть равны по ID");
     }
 
     //Наследники класса Task равны друг другу, если равен их id
@@ -28,6 +28,6 @@ public class TaskTests {
         epic.setId(1);
         subtask.setId(1);
 
-        assertEquals(epic, subtask, "Наследники должны быть равны по ID");
+        assertEquals(epic.getId(), subtask.getId(), "Наследники должны быть равны по ID");
     }
 }

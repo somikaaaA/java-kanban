@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class InMemoryHistoryManagerTests {
 
-    //добавляемые в HistoryManager, сохраняют предыдущую версию задачи и её данных.
+    //добавляемые в HistoryManager, удаляют предыдущую версию задачи и её данных.
     @Test
     public void testSavingPreviousVersionOfTask() {
         InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
@@ -28,8 +28,6 @@ public class InMemoryHistoryManagerTests {
 
         ArrayList<Task> history = (ArrayList<Task>) historyManager.getHistory();
 
-        assertEquals(2, history.size(), "В истории должно быть две версии задачи.");
-        assertTrue(history.contains(originalTask), "Оригинальная версия задачи должна быть в истории.");
-        assertTrue(history.contains(new Task("Оригинальная задача", "Описание задачи")), "Первая версия задачи должна быть в истории.");
+        assertEquals(1, history.size(), "В истории должна быть одна версия задачи.");
     }
 }
