@@ -3,10 +3,9 @@ package tests;
 import model.Epic;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class EpicTests {
-
     //Объект Epic нельзя добавить в самого себя в виде подзадачи;
     @Test
     void testAddSelfAsSubtask() {

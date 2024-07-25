@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ManagersTests {
-
     //утилитарный класс всегда возвращает проинициализированные и готовые к работе экземпляры менеджеров
     @Test
     public void testManagersReturnInitializedInstances() {
