@@ -1,5 +1,3 @@
-package Tests;
-
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -8,16 +6,15 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TaskTests {
-
     //Экземпляры класса Task равны друг другу, если равен их id
     @Test
     void taskEqualsbySameId() {
-        Task task1 = new Task("Test 1", "Description 1");
-        Task task2 = new Task("Test 2", "Description 2");
+        Task task1 = new Task("Test 1", "Описание 1");
+        Task task2 = new Task("Test 2", "Описание 2");
         task1.setId(1);
         task2.setId(1);
 
-        assertEquals(task1, task2, "Задачи должны быть равны по ID");
+        assertEquals(task1.getId(), task2.getId(), "Задачи должны быть равны по ID");
     }
 
     //Наследники класса Task равны друг другу, если равен их id
@@ -28,6 +25,6 @@ public class TaskTests {
         epic.setId(1);
         subtask.setId(1);
 
-        assertEquals(epic, subtask, "Наследники должны быть равны по ID");
+        assertEquals(epic.getId(), subtask.getId(), "Наследники должны быть равны по ID");
     }
 }

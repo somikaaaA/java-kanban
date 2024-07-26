@@ -1,7 +1,6 @@
-package Tests;
-
 import controllers.InMemoryTaskManager;
 import controllers.TaskManager;
+import controllers.Managers;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -11,47 +10,45 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InMemoryTaskManagerTests {
-
 
     private TaskManager taskManager;
 
     @BeforeEach
     void setUp() {
-        taskManager = new InMemoryTaskManager(); // Инициализация перед каждым тестом
+        taskManager = Managers.getDefault(); // Инициализация перед каждым тестом
     }
 
     //InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;
     @Test
     public void testAddAndGetTasksByType() {
-        // Добавляем задачу
+        // Создание и добавление обычной задачи
         Task task = new Task("Задача 1", "Описание задачи 1");
         int taskId = taskManager.addNewTask(task);
-        assertEquals(taskId, task.getId(), "ID задачи после добавления должен совпадать с заданным ID.");
+        assertNotNull(taskId, "ID задачи не должен быть null");
 
-        // Добавляем подзадачу
-        Subtask subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", 1);
-        int subtaskId = taskManager.addNewSubtask(subtask);
-        assertEquals(subtaskId, subtask.getId(), "ID подзадачи после добавления должен совпадать с заданным ID.");
+        // Проверка наличия задачи по ID
+        Task foundTask = taskManager.getTask(taskId);
+        assertEquals(task, foundTask, "Найденная задача должна совпадать с добавленной");
 
-        // Добавляем эпик
+        // Создание и добавление эпика
         Epic epic = new Epic("Эпик 1", "Описание эпика 1");
         int epicId = taskManager.addNewEpic(epic);
-        assertEquals(epicId, epic.getId(), "ID эпика после добавления должен совпадать с заданным ID.");
+        assertNotNull(epicId, "ID эпика не должен быть null");
 
-        // Проверяем наличие задачи в коллекции задач
-        ArrayList<Task> allTasks = taskManager.getTasks();
-        assertTrue(allTasks.contains(task), "Задача должна быть найдена в коллекции задач.");
+        // Проверка наличия эпика по ID
+        Epic foundEpic = (Epic) taskManager.getEpic(epicId);
+        assertEquals(epic, foundEpic, "Найденный эпик должен совпадать с добавленным");
 
-        // Проверяем наличие подзадачи в коллекции подзадач
-        ArrayList<Subtask> allSubtasks = taskManager.getSubtasks();
-        assertTrue(allSubtasks.contains(subtask), "Подзадача должна быть найдена в коллекции подзадач.");
+        // Создание и добавление подзадачи к эпику
+        Subtask subtask = new Subtask("Подзадача 1", "Описание подзадачи 1", epicId);
+        Integer subtaskId = taskManager.addNewSubtask(subtask);
+        assertNotNull(subtaskId, "ID подзадачи не должен быть null");
 
-        // Проверяем наличие эпика в коллекции эпиков
-        ArrayList<Epic> allEpics = taskManager.getEpics();
-        assertTrue(allEpics.contains(epic), "Эпик должен быть найден в коллекции эпиков.");
+        // Проверка наличия подзадачи по ID
+        Subtask foundSubtask = (Subtask) taskManager.getSubtask(subtaskId);
+        assertEquals(subtask, foundSubtask, "Найденная подзадача должна совпадать с добавленной");
     }
 
     //что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера
