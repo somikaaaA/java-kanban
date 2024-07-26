@@ -1,5 +1,6 @@
 import controllers.InMemoryTaskManager;
 import controllers.TaskManager;
+import controllers.Managers;
 import model.Epic;
 import model.Subtask;
 import model.Task;
@@ -16,7 +17,7 @@ public class InMemoryTaskManagerTests {
 
     @BeforeEach
     void setUp() {
-        taskManager = new InMemoryTaskManager(); // Инициализация перед каждым тестом
+        taskManager = Managers.getDefault(); // Инициализация перед каждым тестом
     }
 
     //InMemoryTaskManager действительно добавляет задачи разного типа и может найти их по id;

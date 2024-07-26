@@ -1,4 +1,5 @@
-import controllers.InMemoryHistoryManager;
+import controllers.HistoryManager;
+import controllers.Managers;
 import model.Task;
 import org.junit.jupiter.api.Test;
 
@@ -7,12 +8,10 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InMemoryHistoryManagerTests {
-
     //добавляемые в HistoryManager, удаляют предыдущую версию задачи и её данных.
     @Test
     public void testSavingPreviousVersionOfTask() {
-        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
-
+        HistoryManager historyManager = Managers.getDefaultHistory();
         Task originalTask = new Task("Оригинальная задача", "Описание задачи");
         originalTask.setId(1); // Установка ID для теста
 
