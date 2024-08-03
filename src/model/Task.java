@@ -24,12 +24,14 @@ public class Task {
 
     protected String description;
     protected Status status;
+    protected TaskType type;
 
     public Task(String name, String description) {
         this.id = -1; // Инициализируем с некорректным значением, чтобы проверить корректность генерации ID
         this.name = name;
         this.description = description;
         this.status = Status.NEW;
+        this.type = TaskType.TASK;
     }
 
     public int getId() {
@@ -50,7 +52,18 @@ public class Task {
 
     @Override
     public String toString() {
-        return "ID: " + id + ", Name: " + name + ", Description: " + description + ", Status: " + status.name();
+        return id + "," + type + "," + name + "," + status + "," + description;
+    }
+
+    public static Task fromString(String value) {
+        String[] parts = value.split(",");
+        int id = Integer.parseInt(parts[0]);
+        String type = parts[1];
+        String name = parts[2];
+        Status status = Status.valueOf(parts[3]);
+        String description = parts[4];
+        int epicId = parts.length > 5 ? Integer.parseInt(parts[5]) : -1;
+        return new Task(name, description);
     }
 
     @Override

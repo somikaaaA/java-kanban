@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InMemoryHistoryManagerTests {
-    //добавляемые в HistoryManager, удаляют предыдущую версию задачи и её данных.
+    //добавляемые в HistoryManager, сохраняют предыдущую версию задачи и её данных.
     @Test
     public void testSavingPreviousVersionOfTask() {
         HistoryManager historyManager = Managers.getDefaultHistory();

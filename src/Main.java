@@ -1,14 +1,15 @@
-import controllers.InMemoryTaskManager;
 import controllers.TaskManager;
 import controllers.Managers;
 
 import model.Task;
 import model.Subtask;
 import model.Epic;
-import model.Status;
-import java.util.*;
+
+import java.util.List;
 
 public class Main {
+    private static List<String> subtaskIds;
+
     public static void main(String[] args) {
         TaskManager manager = Managers.getDefault();
 
@@ -21,8 +22,8 @@ public class Main {
         manager.addNewTask(task2);
 
         // Создание эпика
-        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1");
-        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2");
+        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1", subtaskIds);
+        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2", subtaskIds);
 
         // Добавление эпика в систему
         manager.addNewEpic(epic1);
