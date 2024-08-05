@@ -1,79 +1,114 @@
+import model.Status;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
+import java.util.Scanner;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import model.Task;
 import model.Epic;
 import model.Subtask;
+
 import controllers.FileBackedTaskManager;
 
 public class FileBackedTaskManagerTests {
-    private FileBackedTaskManager fileBackedTaskManager;
     private File tempFile;
+    private FileBackedTaskManager fileBackedTaskManager;
+    private List<String> subtaskIds;
+    private static final String TEST_DATA = "1,TASK,Task1,NEW,Description task1,\n" +
+            "2,EPIC,Epic2,DONE,Description epic2,\n" +
+            "3,SUBTASK,Sub Task3,DONE,Description sub task3,2";
 
     @BeforeEach
-    public void setUp() throws IOException {
-        tempFile = File.createTempFile("test", ".json");
-        fileBackedTaskManager = new FileBackedTaskManager(tempFile);
+    void setUp() throws IOException{
+        tempFile = File.createTempFile("temp", ".csv");
     }
 
     @AfterEach
-    public void tearDown() {
-        tempFile.delete();
+    void tearDown() throws IOException {
+
+        assertTrue(tempFile.delete());
     }
 
     @Test
-    public void testSavingAndLoadingEmptyFile() throws IOException {
-        // Сохраняем пустой файл
-        fileBackedTaskManager.save();
+    void saveAndLoadEmptyFile() throws IOException {
 
-        // Загружаем файл
-        FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
+        fileBackedTaskManager = new FileBackedTaskManager(tempFile);
 
-        // Проверяем, что после загрузки файл остается пустым
-        assertTrue(loadedManager.getTasks().isEmpty());
+        assertTrue(tempFile.exists());
+        assertEquals(0, tempFile.length());
+
+        List<Object> loadedData = FileBackedTaskManager.loadFromFile(tempFile);
+
+        assertNotNull(loadedData);
+        assertTrue(loadedData.isEmpty());
     }
 
     @Test
-    public void testSavingMultipleTasks() throws IOException {
-        // Добавляем несколько задач
-        Task task1 = new Task("Task 1", "Description 1");
-        Task task2 = new Task("Task 2", "Description 2");
-        fileBackedTaskManager.addNewTask(task1);
-        fileBackedTaskManager.addNewTask(task2);
+    void saveDifferentTypesOfTasksToFile() throws IOException {
 
-        // Сохраняем файл
+        Task task = new Task("Task Name", "Task Description");
+        Epic epic = new Epic("Epic Name", "Epic Description", subtaskIds);
+        Subtask subtask = new Subtask("Subtask Name", "Subtask Description", 1);
+
+        fileBackedTaskManager = new FileBackedTaskManager(tempFile);
+
+        fileBackedTaskManager.addNewTask(task);
+        fileBackedTaskManager.addNewEpic(epic);
+        fileBackedTaskManager.addNewSubtask(subtask);
+
         fileBackedTaskManager.save();
 
-        // Загружаем файл
-        FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
+        assertTrue(tempFile.exists());
+        long fileSize = tempFile.length();
+        assertTrue(fileSize > 0);
 
-        // Проверяем, что все задачи были сохранены и загружены
-        assertEquals(2, loadedManager.getTasks().size());
-        assertTrue(loadedManager.getTasks().contains(task1));
-        assertTrue(loadedManager.getTasks().contains(task2));
+        Scanner scanner = new Scanner(tempFile);
+        int expectedLines = 3;
+        int actualLines = 0;
+        while (scanner.hasNextLine()) {
+            scanner.nextLine();
+            actualLines++;
+        }
+        scanner.close();
+        assertEquals(expectedLines, actualLines);
     }
 
     @Test
-    public void testLoadingMultipleTasks() throws IOException {
-        // Добавляем несколько задач
-        Task task1 = new Task("Task 1", "Description 1");
-        Task task2 = new Task("Task 2", "Description 2");
-        fileBackedTaskManager.addNewTask(task1);
-        fileBackedTaskManager.addNewTask(task2);
+    void testLoadFromFileWithDifferentTypesOfTasks() throws IOException {
 
-        // Сохраняем файл
-        fileBackedTaskManager.save();
+        Files.writeString(tempFile.toPath(), TEST_DATA);
 
-        // Загружаем файл
-        FileBackedTaskManager loadedManager = FileBackedTaskManager.loadFromFile(tempFile);
+        fileBackedTaskManager = new FileBackedTaskManager(tempFile);
 
-        // Проверяем, что все задачи были сохранены и загружены
-        assertEquals(2, loadedManager.getTasks().size());
-        assertTrue(loadedManager.getTasks().contains(task1));
-        assertTrue(loadedManager.getTasks().contains(task2));
+        List<Object> loadedData = FileBackedTaskManager.loadFromFile(tempFile);
+
+        assertNotNull(loadedData);
+        assertEquals(3, loadedData.size());
+
+        assertTrue(loadedData.stream().anyMatch(data -> data instanceof Task));
+        assertTrue(loadedData.stream().anyMatch(data -> data instanceof Epic));
+        assertTrue(loadedData.stream().anyMatch(data -> data instanceof Subtask));
+
+        Task loadedTask = (Task) loadedData.get(0);
+        assertEquals("Task1", loadedTask.getName());
+        assertEquals("Description task1", loadedTask.getDescription());
+        assertEquals(Status.NEW, loadedTask.getStatus());
+
+        Epic loadedEpic = (Epic) loadedData.get(1);
+        assertEquals("Epic2", loadedEpic.getName());
+        assertEquals("Description epic2", loadedEpic.getDescription());
+        assertEquals(Status.NEW, loadedEpic.getStatus());
+
+        Subtask loadedSubtask = (Subtask) loadedData.get(2);
+        assertEquals("Sub Task3", loadedSubtask.getName());
+        assertEquals("Description sub task3", loadedSubtask.getDescription());
+        assertEquals(Status.NEW, loadedSubtask.getStatus());
+        assertEquals(2, loadedSubtask.getEpicId()); // Проверяем, что подзадача связана с правильным эпиком
     }
 }

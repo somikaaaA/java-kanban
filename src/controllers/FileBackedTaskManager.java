@@ -1,10 +1,13 @@
 package controllers;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
+import exceptions.ManagerSaveException;
 import model.Task;
 import model.Epic;
 import model.Subtask;
@@ -22,17 +25,14 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             // Заголовок таблицы
             writer.write("id,type,name,status,description,epic\n");
 
-            // Сохраняем задачи
             for (Task task : tasks.values()) {
                 writer.write(task.toString() + "\n");
             }
 
-            // Сохраняем подзадачи
             for (Subtask subtask : subtasks.values()) {
                 writer.write(subtask.toString() + "\n");
             }
 
-            // Сохраняем эпики
             for (Epic epic : epics.values()) {
                 writer.write(epic.toString() + "\n");
             }
@@ -41,16 +41,40 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         }
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) {
-        FileBackedTaskManager manager = new FileBackedTaskManager(file);
-        try {
-            manager.loadFromFile(file); // Загружаем данные из файла
-        } catch (ManagerSaveException e) {
-            System.err.println("Ошибка при загрузке данных из файла: " + e.getMessage());
-        }
-        return manager;
-    }
+    public static List<Object> loadFromFile(File file){
+        List<Object> records = new ArrayList<>();
+        try{
+            String content = Files.readString(file.toPath());
+            String[] lines = content.split("\n"); //делим содержимое файла на строки
 
+            for (String line : lines){
+                if (!line.isEmpty()){
+                    String[] fields = line.split(","); //делим строки на поля
+
+                    Object record = null;
+                    switch (line.split(",")[1]) {
+                        case "TASK":
+                            record = Task.fromString(line);
+                            break;
+                        case "EPIC":
+                            record = Epic.fromString(line);
+                            break;
+                        case "SUBTASK":
+                            record = Subtask.fromString(line);
+                            break;
+                        default: continue;
+                    }
+
+                    if (record != null) {
+                        records.add(record);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new ManagerSaveException("Ошибка при чтении данных из файла", e);
+        }
+        return records;
+    }
 
 
     @Override
