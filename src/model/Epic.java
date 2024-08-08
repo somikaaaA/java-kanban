@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Epic extends Task {
     protected final List<Integer> subtaskIds = new ArrayList<>();
+    //private int numberOfSubtasks;
 
     public Epic(String name, String description, List<String> subtaskIds) {
         super(name, description);
@@ -52,7 +53,7 @@ public class Epic extends Task {
         sb.append(",").append(subtaskIds.size());
         return sb.toString();
     }
-
+  
     public static Epic fromString(String value) {
         String[] parts = value.split(",");
         int id = Integer.parseInt(parts[0]);

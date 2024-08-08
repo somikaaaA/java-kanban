@@ -36,6 +36,7 @@ public class InMemoryTaskManagerTests {
 
         // Создание и добавление эпика
         Epic epic = new Epic("Эпик 1", "Описание эпика 1", subtaskIds);
+
         int epicId = taskManager.addNewEpic(epic);
         assertNotNull(epicId, "ID эпика не должен быть null");
 

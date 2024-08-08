@@ -32,5 +32,4 @@ public class ManagersTests {
         assertEquals("Измененная задача", updatedTask.getName());
         assertEquals("Новое описание задачи", updatedTask.getDescription());
     }
-
 }

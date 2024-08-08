@@ -9,7 +9,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TaskTests {
     private List<String> subtaskIds;
-
     //Экземпляры класса Task равны друг другу, если равен их id
     @Test
     void taskEqualsbySameId() {
@@ -25,6 +24,7 @@ public class TaskTests {
     @Test
     void epicEqualsSubtaskBySameId() {
         Epic epic = new Epic("Epic Test", "Epic Description", subtaskIds);
+
         Subtask subtask = new Subtask("Subtask Test", "Subtask Description", 1);
         epic.setId(1);
         subtask.setId(1);

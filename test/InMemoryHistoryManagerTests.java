@@ -1,4 +1,3 @@
-
 import controllers.HistoryManager;
 import controllers.Managers;
 import model.Task;
