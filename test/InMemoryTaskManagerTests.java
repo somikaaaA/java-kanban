@@ -8,12 +8,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class InMemoryTaskManagerTests {
 
     private TaskManager taskManager;
+    private List<String> subtaskIds;
 
     @BeforeEach
     void setUp() {
@@ -33,7 +35,8 @@ public class InMemoryTaskManagerTests {
         assertEquals(task, foundTask, "Найденная задача должна совпадать с добавленной");
 
         // Создание и добавление эпика
-        Epic epic = new Epic("Эпик 1", "Описание эпика 1");
+        Epic epic = new Epic("Эпик 1", "Описание эпика 1", subtaskIds);
+
         int epicId = taskManager.addNewEpic(epic);
         assertNotNull(epicId, "ID эпика не должен быть null");
 

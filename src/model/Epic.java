@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import controllers.InMemoryTaskManager;
@@ -10,9 +11,9 @@ public class Epic extends Task {
     protected final List<Integer> subtaskIds = new ArrayList<>();
     //private int numberOfSubtasks;
 
-    public Epic(String name, String description) {
+    public Epic(String name, String description, List<String> subtaskIds) {
         super(name, description);
-        //this.numberOfSubtasks = 0;
+        this.type = TaskType.EPIC;
     }
 
     public void addSubtaskId(int subtaskId) {
@@ -48,8 +49,19 @@ public class Epic extends Task {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(super.toString());
-        sb.append(", Number of Subtasks: ").append(subtaskIds.size());
+        sb.append(",").append(subtaskIds.size());
         return sb.toString();
+    }
+  
+    public static Epic fromString(String value) {
+        String[] parts = value.split(",");
+        int id = Integer.parseInt(parts[0]);
+        String type = parts[1];
+        String name = parts[2];
+        Status status = Status.valueOf(parts[3]);
+        String description = parts[4];
+        List<String> subtaskIds = Arrays.asList(parts.length > 5 ? parts[5].split(",") : new String[]{});
+        return new Epic(name, description, subtaskIds);
     }
 
     @Override

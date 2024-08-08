@@ -7,9 +7,9 @@ import model.Epic;
 import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
-    private static HashMap<Integer, Task> tasks = new HashMap<>();
-    private static HashMap<Integer, Epic> epics = new HashMap<>();
-    private static HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    protected static HashMap<Integer, Task> tasks = new HashMap<>();
+    protected static HashMap<Integer, Epic> epics = new HashMap<>();
+    protected static HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HistoryManager historyManager = Managers.getDefaultHistory();
     private int generatorId = 0;
 
