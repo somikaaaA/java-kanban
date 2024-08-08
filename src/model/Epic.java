@@ -45,7 +45,6 @@ public class Epic extends Task {
         return new ArrayList<>(subtaskIds); // Возвращаем копию списка, чтобы избежать внешнего изменения исходного списка
     }
 
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(super.toString());
