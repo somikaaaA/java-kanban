@@ -21,11 +21,30 @@ public class InMemoryTaskManager implements TaskManager {
         return subtasks.get(id);
     }
 
+    private NavigableSet<Task> prioritizedTasks = new TreeSet<>((t1, t2) -> {
+        if (t1.getStartTime() == null && t2.getStartTime() == null) {
+            return 0;
+        }
+        if (t1.getStartTime() == null) {
+            return 1;
+        }
+        if (t2.getStartTime() == null) {
+            return -1;
+        }
+        return t1.getStartTime().compareTo(t2.getStartTime());
+    });
+
+    public List<Task> getPrioritizedTasks() {
+        List<Task> sortedTasks = new ArrayList<>(prioritizedTasks);
+        return sortedTasks;
+    }
+
     @Override
     public int addNewTask(Task task) {
         final int id = ++generatorId;
         task.setId(id);
         tasks.put(id, task);
+        prioritizedTasks.add(task);
         return id;
     }
 
@@ -34,6 +53,7 @@ public class InMemoryTaskManager implements TaskManager {
         final int id = ++generatorId;
         epic.setId(id);
         epics.put(id, epic);
+        prioritizedTasks.add(epic);
         return id;
     }
 
@@ -47,6 +67,7 @@ public class InMemoryTaskManager implements TaskManager {
         final int id = ++generatorId;
         subtask.setId(id);
         subtasks.put(id, subtask);
+        prioritizedTasks.add(subtask);
         epic.addSubtaskId(subtask.getId());
         updateEpicStatus(epicId);
         return id;
