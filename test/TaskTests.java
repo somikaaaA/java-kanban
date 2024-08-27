@@ -3,6 +3,9 @@ import model.Subtask;
 import model.Task;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,8 +15,8 @@ public class TaskTests {
     //Экземпляры класса Task равны друг другу, если равен их id
     @Test
     void taskEqualsbySameId() {
-        Task task1 = new Task("Test 1", "Описание 1");
-        Task task2 = new Task("Test 2", "Описание 2");
+        Task task1 = new Task("Test 1", "Описание 1", Duration.ZERO, LocalDateTime.MAX);
+        Task task2 = new Task("Test 2", "Описание 2", Duration.ZERO, LocalDateTime.MAX);
         task1.setId(1);
         task2.setId(1);
 
@@ -23,9 +26,9 @@ public class TaskTests {
     //Наследники класса Task равны друг другу, если равен их id
     @Test
     void epicEqualsSubtaskBySameId() {
-        Epic epic = new Epic("Epic Test", "Epic Description", subtaskIds);
+        Epic epic = new Epic("Epic Test", "Epic Description", Arrays.asList());
 
-        Subtask subtask = new Subtask("Subtask Test", "Subtask Description", 1);
+        Subtask subtask = new Subtask("Subtask Test", "Subtask Description",  Duration.ZERO, LocalDateTime.MAX, 1);
         epic.setId(1);
         subtask.setId(1);
 

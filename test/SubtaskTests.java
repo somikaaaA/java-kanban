@@ -3,6 +3,9 @@ import controllers.InMemoryTaskManager;
 import model.Subtask;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class SubtaskTests {
@@ -10,7 +13,7 @@ public class SubtaskTests {
     @Test
     public void testCannotMakeSubtaskItsOwnEpic() {
         InMemoryTaskManager manager = new InMemoryTaskManager();
-        Subtask subtask = new Subtask("Тестовая подзадача", "Описание", 1);
+        Subtask subtask = new Subtask("Тестовая подзадача", "Описание", Duration.ZERO, LocalDateTime.MAX, 1);
 
         assertFalse(manager.isSelfEpic(subtask), "Subtask не должен иметь возможность стать своим эпиком.");
     }

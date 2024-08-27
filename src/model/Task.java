@@ -1,10 +1,27 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
     protected int id;
     protected String name;
+    protected String description;
+    protected Status status;
+    protected TaskType type;
+    private Duration duration;
+    private LocalDateTime startTime;
+
+    public Task(String name, String description, Duration duration, LocalDateTime startTime) {
+        this.id = -1; // Инициализируем с некорректным значением, чтобы проверить корректность генерации ID
+        this.name = name;
+        this.description = description;
+        this.status = Status.NEW;
+        this.type = TaskType.TASK;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
 
     public String getName() {
         return name;
@@ -20,18 +37,6 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    protected String description;
-    protected Status status;
-    protected TaskType type;
-
-    public Task(String name, String description) {
-        this.id = -1; // Инициализируем с некорректным значением, чтобы проверить корректность генерации ID
-        this.name = name;
-        this.description = description;
-        this.status = Status.NEW;
-        this.type = TaskType.TASK;
     }
 
     public int getId() {
@@ -50,9 +55,31 @@ public class Task {
         this.status = status;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration.toMinutes());
+    }
+
     @Override
     public String toString() {
-        return id + "," + type + "," + name + "," + status + "," + description;
+        StringBuilder sb = new StringBuilder(id + "," + type + "," + name + "," + status + "," + description + ","
+                + duration.toMinutes() + "," + startTime.toString());
+        return sb.toString();
     }
 
     public static Task fromString(String value) {
@@ -62,24 +89,13 @@ public class Task {
         String name = parts[2];
         Status status = Status.valueOf(parts[3]);
         String description = parts[4];
-        int epicId = parts.length > 5 ? Integer.parseInt(parts[5]) : -1;
-        return new Task(name, description);
-    }
+        long durationMinutes = Long.parseLong(parts[5]);
+        String startTimeStr = parts[6];
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return id == task.id &&
-                Objects.equals(name, task.name) &&
-                Objects.equals(description, task.description) &&
-                status == task.status;
-    }
+        Duration duration = Duration.ofMinutes(durationMinutes);
+        LocalDateTime startTime = LocalDateTime.parse(startTimeStr);
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, status);
+        return new Task(name, description, duration, startTime);
     }
 
     @Override

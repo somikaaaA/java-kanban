@@ -4,6 +4,10 @@ import model.Subtask;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class EpicTests {
@@ -17,8 +21,9 @@ public class EpicTests {
 
     @Test
     public void testAddSubtaskToEpicThatIsItself() {
-        Epic epic = new Epic("Test Epic", "Description", null);
-        Subtask subtask = new Subtask("Test Subtask", "Description", epic.getId());
+        Epic epic = new Epic("Test Epic", "Description", Arrays.asList());
+        Subtask subtask = new Subtask("Test Subtask", "Description", Duration.ZERO, LocalDateTime.MAX, epic.getId());
+
         assertThrows(IllegalArgumentException.class, () -> taskManager.addNewSubtask(subtask));
     }
 }

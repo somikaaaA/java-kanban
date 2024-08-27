@@ -8,6 +8,10 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Scanner;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import model.Task;
@@ -19,7 +23,7 @@ import controllers.FileBackedTaskManager;
 public class FileBackedTaskManagerTests {
     private File tempFile;
     private FileBackedTaskManager fileBackedTaskManager;
-    private List<String> subtaskIds;
+    //private List<String> subtaskIds;
     private static final String TEST_DATA = "1,TASK,Task1,NEW,Description task1,\n" +
             "2,EPIC,Epic2,DONE,Description epic2,\n" +
             "3,SUBTASK,Sub Task3,DONE,Description sub task3,2";
@@ -31,7 +35,6 @@ public class FileBackedTaskManagerTests {
 
     @AfterEach
     void tearDown() throws IOException {
-
         assertTrue(tempFile.delete());
     }
 
@@ -52,9 +55,9 @@ public class FileBackedTaskManagerTests {
     @Test
     void saveDifferentTypesOfTasksToFile() throws IOException {
 
-        Task task = new Task("Task Name", "Task Description");
-        Epic epic = new Epic("Epic Name", "Epic Description", subtaskIds);
-        Subtask subtask = new Subtask("Subtask Name", "Subtask Description", 1);
+        Task task = new Task("Task Name", "Task Description", Duration.ZERO, LocalDateTime.MAX);
+        Epic epic = new Epic("Epic Name", "Epic Description", Arrays.asList());
+        Subtask subtask = new Subtask("Subtask Name", "Subtask Description", Duration.ZERO, LocalDateTime.MAX, 1);
 
         fileBackedTaskManager = new FileBackedTaskManager(tempFile);
 
@@ -103,12 +106,12 @@ public class FileBackedTaskManagerTests {
         Epic loadedEpic = (Epic) loadedData.get(1);
         assertEquals("Epic2", loadedEpic.getName());
         assertEquals("Description epic2", loadedEpic.getDescription());
-        assertEquals(Status.NEW, loadedEpic.getStatus());
+        assertEquals(Status.DONE, loadedEpic.getStatus());
 
         Subtask loadedSubtask = (Subtask) loadedData.get(2);
         assertEquals("Sub Task3", loadedSubtask.getName());
         assertEquals("Description sub task3", loadedSubtask.getDescription());
-        assertEquals(Status.NEW, loadedSubtask.getStatus());
+        assertEquals(Status.DONE, loadedSubtask.getStatus());
         assertEquals(2, loadedSubtask.getEpicId()); // Проверяем, что подзадача связана с правильным эпиком
     }
 }
