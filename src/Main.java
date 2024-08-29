@@ -1,103 +1,117 @@
-import controllers.TaskManager;
-import controllers.Managers;
+//package com.example.taskmanager;
 
 import model.Task;
-import model.Subtask;
 import model.Epic;
+import model.Subtask;
+import controllers.FileBackedTaskManager;
 
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.time.LocalDateTime;
 
 public class Main {
-    private static List<String> subtaskIds;
-
-    public static void main(String[] args) {
-//        TaskManager manager = Managers.getDefault();
+    public static void main(String[] args) throws IOException {
+//        File tempFile = File.createTempFile("temp", ".csv");
+//        FileBackedTaskManager manager = new FileBackedTaskManager(tempFile);
 //
-//        // Создание задач
-//        Task task1 = new Task("Задача 1", "Описание задачи 1");
-//        Task task2 = new Task("Задача 2", "Описание задачи 2");
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Добро пожаловать в менеджер задач!");
 //
-//        // Добавление задач в систему
-//        manager.addNewTask(task1);
-//        manager.addNewTask(task2);
+//        while (true) {
+//            System.out.println("\nВыберите действие:");
+//            System.out.println("1. Создать задачу");
+//            System.out.println("2. Создать эпик");
+//            System.out.println("3. Создать подзадачу");
+//            System.out.println("4. Сохранить изменения");
+//            System.out.println("5. Загрузить задачи из файла");
+//            System.out.println("6. Просмотр всех задач");
+//            System.out.println("7. Выход");
 //
-//        // Создание эпика
-//        Epic epic1 = new Epic("Эпик 1", "Описание эпика 1", subtaskIds);
-//        Epic epic2 = new Epic("Эпик 2", "Описание эпика 2", subtaskIds);
+//            int choice = scanner.nextInt();
+//            scanner.nextLine(); // Обработка переноса строки после ввода числа
 //
-//        // Добавление эпика в систему
-//        manager.addNewEpic(epic1);
-//        manager.addNewEpic(epic2);
-//
-//        // Создание подзадачи
-//        Subtask subtask1 = new Subtask("Подзадача 1", "Описание подзадачи 1", 1);
-//        Subtask subtask2 = new Subtask("Подзадача 2", "Описание подзадачи 2", 1);
-//        Subtask subtask3 = new Subtask("Подзадача 3", "Описание подзадачи 3", 1);
-//
-//        // Добавление подзадач в систему
-//        manager.addNewSubtask(subtask1);
-//        manager.addNewSubtask(subtask2);
-//        manager.addNewSubtask(subtask3);
-//
-//        // Создание эпика с подзадачами
-//        Epic epicWithSubtasks = new Epic("Эпик с подзадачами", "Описание эпика с подзадачами", subtaskIds);
-//        epicWithSubtasks.addSubtaskId(subtask1.getId());
-//        epicWithSubtasks.addSubtaskId(subtask2.getId());
-//        epicWithSubtasks.addSubtaskId(subtask3.getId());
-//
-//        // Добавление эпика с подзадачами в систему
-//        manager.addNewEpic(epicWithSubtasks);
-//
-//        // Создание эпика без подзадач
-//        Epic epicWithoutSubtasks = new Epic("Эпик без подзадач", "Описание эпика без подзадач", subtaskIds);
-//        manager.addNewEpic(epicWithoutSubtasks);
-//
-//        // Запросы к системе
-//        manager.getTask(1);
-//        manager.getTask(2);
-//        manager.getEpic(1);
-//        manager.getEpic(2);
-//        manager.getSubtask(1);
-//        manager.getSubtask(2);
-//        manager.getSubtask(3);
-//
-//        // Печать истории после каждого запроса
-//        printAllTasks(manager);
-//        printAllTasks(manager);
-//        printAllTasks(manager);
-//        printAllTasks(manager);
-//        printAllTasks(manager);
-//        printAllTasks(manager);
-//        printAllTasks(manager);
-//
-//        // Удаление задачи из истории
-//        manager.deleteTaskById(1);
-//        printAllTasks(manager);
-//
-//        // Удаление эпика с подзадачами
-//        manager.deleteEpicById(1);
-//        printAllTasks(manager);
-//    }
-//
-//    private static void printAllTasks(TaskManager manager) {
-//        System.out.println("Задачи:");
-//        for (Task task : manager.getTasks()) {
-//            System.out.println(task);
-//        }
-//        System.out.println("Эпики:");
-//        for (Epic epic : manager.getEpics()) {
-//            System.out.println(epic);
-//            for (Task task : manager.getEpicSubtasks(epic.getId())) {
-//                System.out.println("--> " + task);
+//            switch (choice) {
+//                case 1 -> createTask(scanner, manager);
+//                case 2 -> createEpic(scanner, manager);
+//                case 3 -> createSubtask(scanner, manager);
+//                case 4 -> saveChanges(manager);
+//                case 5 -> loadTasksFromFile(manager);
+//                case 6 -> printAllTasks(manager);
+//                case 7 -> {
+//                    break;
+//                }
+//                default -> System.out.println("Неверный выбор. Попробуйте еще раз.");
 //            }
 //        }
-//        System.out.println("Подзадачи:");
-//        for (Subtask subtask : manager.getSubtasks()) {
-//            System.out.println(subtask);
-//        }
+//    }
 //
-//        System.out.println("История:");
-//        for (Task task : manager.getHistory()) {
+//    private static void createTask(Scanner scanner, FileBackedTaskManager manager) {
+//        System.out.print("Введите название задачи: ");
+//        String name = scanner.nextLine();
+//        System.out.print("Введите описание задачи: ");
+//        String description = scanner.nextLine();
+//        System.out.print("Введите продолжительность в минутах: ");
+//        long durationMinutes = scanner.nextLong();
+//        scanner.nextLine(); // Обработка переноса строки после ввода числа
+//        System.out.print("Введите время начала (формат HH:mm): ");
+//        String startTimeStr = scanner.nextLine();
+//        LocalDateTime startTime = LocalDateTime.parse(startTimeStr);
+//
+//        Task task = new Task(name, description, Duration.ofMinutes(durationMinutes), startTime);
+//        manager.addNewTask(task);
+//        System.out.println("Задача создана успешно!");
+//    }
+//
+//    private static void createEpic(Scanner scanner, FileBackedTaskManager manager) {
+//        System.out.print("Введите название эпика: ");
+//        String name = scanner.nextLine();
+//        System.out.print("Введите описание эпика: ");
+//        String description = scanner.nextLine();
+//        System.out.print("Введите ID подзадачи для добавления в эпик (или нажмите Enter для завершения): ");
+//        int subtaskId = scanner.nextInt();
+//        scanner.nextLine(); // Обработка переноса строки после ввода числа
+//
+//        Epic epic = new Epic(name, description, Arrays.asList(subtaskId));
+//        manager.addNewEpic(epic);
+//        System.out.println("Эпик создан успешно!");
+//    }
+//
+//    private static void createSubtask(Scanner scanner, FileBackedTaskManager manager) {
+//        System.out.print("Введите название подзадачи: ");
+//        String name = scanner.nextLine();
+//        System.out.print("Введите описание подзадачи: ");
+//        String description = scanner.nextLine();
+//        System.out.print("Введите продолжительность в минутах: ");
+//        long durationMinutes = scanner.nextLong();
+//        scanner.nextLine(); // Обработка переноса строки после ввода числа
+//        System.out.print("Введите время начала (формат HH:mm): ");
+//        String startTimeStr = scanner.nextLine();
+//        LocalDateTime startTime = LocalDateTime.parse(startTimeStr);
+//        System.out.print("Введите ID эпика: ");
+//        int epicId = scanner.nextInt();
+//        scanner.nextLine(); // Обработка переноса строки после ввода числа
+//
+//        Subtask subtask = new Subtask(name, description, Duration.ofMinutes(durationMinutes), startTime, epicId);
+//        manager.addNewSubtask(subtask);
+//        System.out.println("Подзадача создана успешно!");
+//    }
+//
+//    private static void saveChanges(FileBackedTaskManager manager) throws IOException {
+//        manager.save();
+//        System.out.println("Изменения сохранены в файле.");
+//    }
+//
+//    private static void loadTasksFromFile(FileBackedTaskManager manager) throws IOException {
+//        manager.loadFromFile();
+//        System.out.println("Задачи загружены из файла.");
+//    }
+//
+//    private static void printAllTasks(FileBackedTaskManager manager) {
+//        System.out.println("Все задачи:");
+//        for (Object task : manager.getAllTasks()) {
 //            System.out.println(task);
 //        }
     }

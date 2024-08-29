@@ -13,7 +13,7 @@ public class SubtaskTests {
     @Test
     public void testCannotMakeSubtaskItsOwnEpic() {
         InMemoryTaskManager manager = new InMemoryTaskManager();
-        Subtask subtask = new Subtask("Тестовая подзадача", "Описание", Duration.ZERO, LocalDateTime.MAX, 1);
+        Subtask subtask = new Subtask("Тестовая подзадача", "Описание", Duration.ofMinutes(10), LocalDateTime.of(2024, 8, 30, 10, 0), 1);
 
         assertFalse(manager.isSelfEpic(subtask), "Subtask не должен иметь возможность стать своим эпиком.");
     }

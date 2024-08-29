@@ -23,7 +23,7 @@ public class ManagersTests {
     @Test
     public void testSetterImpactOnDataManager() {
         TaskManager manager = Managers.getDefault();
-        Task task = new Task("Задача 1", "Описание задачи 1", Duration.ZERO, LocalDateTime.MAX);
+        Task task = new Task("Задача 1", "Описание задачи 1", Duration.ofMinutes(10), LocalDateTime.of(2024, 8, 30, 10, 0));
         int taskId = manager.addNewTask(task);
 
         // Изменение через сеттеры

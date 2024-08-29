@@ -23,7 +23,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void save() {
         try (FileWriter writer = new FileWriter(file)) {
             // Заголовок таблицы
-            writer.write("id,type,name,status,description,duration,start_time,end_time,epic_id\n");
+            writer.write("id,type,name,status,description,epic\n");
 
             for (Task task : tasks.values()) {
                 writer.write(task.toString() + "\n");

@@ -1,8 +1,8 @@
 package model;
 
+import java.util.Objects;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 public class Task {
     protected int id;
@@ -10,8 +10,8 @@ public class Task {
     protected String description;
     protected Status status;
     protected TaskType type;
-    private Duration duration;
-    private LocalDateTime startTime;
+    protected LocalDateTime startTime;
+    protected Duration duration;
 
     public Task(String name, String description, Duration duration, LocalDateTime startTime) {
         this.id = -1; // Инициализируем с некорректным значением, чтобы проверить корректность генерации ID
@@ -19,8 +19,28 @@ public class Task {
         this.description = description;
         this.status = Status.NEW;
         this.type = TaskType.TASK;
-        this.duration = duration;
+        this.startTime = LocalDateTime.now();
+        this.duration = Duration.ZERO;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration.toMinutes());
     }
 
     public String getName() {
@@ -55,30 +75,16 @@ public class Task {
         this.status = status;
     }
 
-    public Duration getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public LocalDateTime getEndTime() {
-        return startTime.plusMinutes(duration.toMinutes());
-    }
-
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(id + "," + type + "," + name + "," + status + "," + description + ","
-                + duration.toMinutes() + "," + startTime.toString());
+        StringBuilder sb = new StringBuilder( id + ","
+                + type + ","
+                + name + ","
+                + status + ","
+                + description + ","
+                + duration.toMinutes() + ","
+                + startTime.toString());
+
         return sb.toString();
     }
 
@@ -94,9 +100,19 @@ public class Task {
 
         Duration duration = Duration.ofMinutes(durationMinutes);
         LocalDateTime startTime = LocalDateTime.parse(startTimeStr);
-
+        //int epicId = parts.length > 5 ? Integer.parseInt(parts[5]) : -1;
         return new Task(name, description, duration, startTime);
     }
+
+//    private Task(String name, String description, Duration duration, LocalDateTime startTime) {
+//        this.id = id;
+//        this.name = name;
+//        this.description = description;
+//        this.status = status;
+//        this.type = TaskType.TASK;
+//        this.duration = duration;
+//        this.startTime = startTime;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -106,11 +122,16 @@ public class Task {
         return id == task.id &&
                 Objects.equals(name, task.name) &&
                 Objects.equals(description, task.description) &&
-                status == task.status;
+                status == task.status &&
+                Objects.equals(duration, task.duration) &&
+                Objects.equals(startTime, task.startTime);
+
+//        Duration duration = Duration.ofMinutes(durationMinutes);
+//        LocalDateTime startTime = LocalDateTime.parse(startTimeStr);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, status);
+        return Objects.hash(id, name, description, status, duration, startTime);
     }
 }

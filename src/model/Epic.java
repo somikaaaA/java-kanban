@@ -11,6 +11,7 @@ import java.util.List;
 
 public class Epic extends Task {
     protected final List<Integer> subtaskIds = new ArrayList<>();
+    //private int numberOfSubtasks;
     private Duration duration;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
@@ -23,30 +24,31 @@ public class Epic extends Task {
         this.endTime = calculateEndTime();
     }
 
-    private Duration calculateDuration(List<Integer> subtaskIds) {
-        Duration totalDuration = Duration.ZERO;
-        for (Integer subtaskId : subtaskIds) {
-            Subtask subtask = InMemoryTaskManager.getSubtaskById(subtaskId);
-            if (subtask != null && subtask.getDuration() != null) {
-                totalDuration = totalDuration.plus(subtask.getDuration());
-            }
-        }
-        return totalDuration;
+    private LocalDateTime calculateEndTime() {
+        return startTime.plusMinutes(duration.toMinutes());
     }
 
     private LocalDateTime calculateStartTime(List<Integer> subtaskIds) {
         LocalDateTime earliestStartTime = LocalDateTime.MAX;
-        for (Integer subtaskId : subtaskIds) {
+        for (Integer subtaskId : subtaskIds){
             Subtask subtask = InMemoryTaskManager.getSubtaskById(subtaskId);
-            if (subtask != null && subtask.getStartTime() != null) {
-                earliestStartTime = earliestStartTime.isBefore(subtask.getStartTime()) ? earliestStartTime : subtask.getStartTime();
+            if (subtask != null && subtask.getDuration() != null){
+                earliestStartTime = earliestStartTime.isBefore(subtask.getStartTime())
+                        ? earliestStartTime : subtask.getStartTime();
             }
         }
         return earliestStartTime;
     }
 
-    private LocalDateTime calculateEndTime() {
-        return startTime.plusMinutes(duration.toMinutes());
+    private Duration calculateDuration(List<Integer> subtaskIds) {
+        Duration totalDuration = Duration.ZERO;
+        for (Integer subtaskId : subtaskIds){
+            Subtask subtask = InMemoryTaskManager.getSubtaskById(subtaskId);
+            if (subtask != null && subtask.getDuration() != null){
+                totalDuration = totalDuration.plus(subtask.getDuration());
+            }
+        }
+        return totalDuration;
     }
 
     public void addSubtaskId(int subtaskId) {
@@ -79,13 +81,16 @@ public class Epic extends Task {
         return new ArrayList<>(subtaskIds); // Возвращаем копию списка, чтобы избежать внешнего изменения исходного списка
     }
 
+//    @Override
+//    public String toString() {
+//        StringBuilder sb = new StringBuilder(super.toString());
+//        sb.append(",").append(startTime).append(",").append(duration);
+//        return sb.toString();
+//    }
+
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(super.toString());
-        sb.append(",").append(duration.toMinutes());
-        sb.append(",").append(startTime.toString());
-        sb.append(",").append(endTime.toString());
-        return sb.toString();
+        return super.toString();// + "," + subtaskIds.size();
     }
 
     public static Epic fromString(String value) {
@@ -97,12 +102,10 @@ public class Epic extends Task {
         String description = parts[4];
         long durationMinutes = Long.parseLong(parts[5]);
         String startTimeStr = parts[6];
-        String endTimeStr = parts[7];
 
         Duration duration = Duration.ofMinutes(durationMinutes);
         LocalDateTime startTime = LocalDateTime.parse(startTimeStr);
-        LocalDateTime endTime = LocalDateTime.parse(endTimeStr);
-
+        //List<String> subtaskIds = Arrays.asList(parts.length > 5 ? parts[5].split(",") : new String[]{});
         return new Epic(name, description, Arrays.asList());
     }
 
