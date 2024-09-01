@@ -4,9 +4,6 @@ import controllers.HistoryManager;
 import model.Task;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ManagersTests {
@@ -23,7 +20,7 @@ public class ManagersTests {
     @Test
     public void testSetterImpactOnDataManager() {
         TaskManager manager = Managers.getDefault();
-        Task task = new Task("Задача 1", "Описание задачи 1", Duration.ofMinutes(10), LocalDateTime.of(2024, 8, 30, 10, 0));
+        Task task = new Task("Задача 1", "Описание задачи 1");
         int taskId = manager.addNewTask(task);
 
         // Изменение через сеттеры

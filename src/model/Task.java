@@ -1,47 +1,10 @@
 package model;
 
 import java.util.Objects;
-import java.time.Duration;
-import java.time.LocalDateTime;
 
 public class Task {
     protected int id;
     protected String name;
-    protected String description;
-    protected Status status;
-    protected TaskType type;
-    protected LocalDateTime startTime;
-    protected Duration duration;
-
-    public Task(String name, String description, Duration duration, LocalDateTime startTime) {
-        this.id = -1; // Инициализируем с некорректным значением, чтобы проверить корректность генерации ID
-        this.name = name;
-        this.description = description;
-        this.status = Status.NEW;
-        this.type = TaskType.TASK;
-        this.startTime = LocalDateTime.now();
-        this.duration = Duration.ZERO;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public Duration getDuration() {
-        return duration;
-    }
-
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
-
-    public LocalDateTime getEndTime() {
-        return startTime.plusMinutes(duration.toMinutes());
-    }
 
     public String getName() {
         return name;
@@ -57,6 +20,18 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    protected String description;
+    protected Status status;
+    protected TaskType type;
+
+    public Task(String name, String description) {
+        this.id = -1; // Инициализируем с некорректным значением, чтобы проверить корректность генерации ID
+        this.name = name;
+        this.description = description;
+        this.status = Status.NEW;
+        this.type = TaskType.TASK;
     }
 
     public int getId() {
@@ -77,15 +52,7 @@ public class Task {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder( id + ","
-                + type + ","
-                + name + ","
-                + status + ","
-                + description + ","
-                + duration.toMinutes() + ","
-                + startTime.toString());
-
-        return sb.toString();
+        return id + "," + type + "," + name + "," + status + "," + description;
     }
 
     public static Task fromString(String value) {
@@ -95,24 +62,9 @@ public class Task {
         String name = parts[2];
         Status status = Status.valueOf(parts[3]);
         String description = parts[4];
-        long durationMinutes = Long.parseLong(parts[5]);
-        String startTimeStr = parts[6];
-
-        Duration duration = Duration.ofMinutes(durationMinutes);
-        LocalDateTime startTime = LocalDateTime.parse(startTimeStr);
-        //int epicId = parts.length > 5 ? Integer.parseInt(parts[5]) : -1;
-        return new Task(name, description, duration, startTime);
+        int epicId = parts.length > 5 ? Integer.parseInt(parts[5]) : -1;
+        return new Task(name, description);
     }
-
-//    private Task(String name, String description, Duration duration, LocalDateTime startTime) {
-//        this.id = id;
-//        this.name = name;
-//        this.description = description;
-//        this.status = status;
-//        this.type = TaskType.TASK;
-//        this.duration = duration;
-//        this.startTime = startTime;
-//    }
 
     @Override
     public boolean equals(Object o) {
@@ -122,16 +74,11 @@ public class Task {
         return id == task.id &&
                 Objects.equals(name, task.name) &&
                 Objects.equals(description, task.description) &&
-                status == task.status &&
-                Objects.equals(duration, task.duration) &&
-                Objects.equals(startTime, task.startTime);
-
-//        Duration duration = Duration.ofMinutes(durationMinutes);
-//        LocalDateTime startTime = LocalDateTime.parse(startTimeStr);
+                status == task.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, status, duration, startTime);
+        return Objects.hash(id, name, description, status);
     }
 }
