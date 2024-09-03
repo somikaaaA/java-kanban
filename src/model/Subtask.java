@@ -1,52 +1,59 @@
 package model;
 
-import java.util.Objects;
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 public class Subtask extends Task {
+    private int epicId;
 
-    public void setEpicId(int epicId) {
+    public Subtask(int id, String descriptionTask, String nameTask,
+                   Status status, int idEpicTask, Duration durationTask, LocalDateTime start) {
+        super(descriptionTask, nameTask, Status.NEW);
+        this.epicId = idEpicTask;
+        this.setDuration(durationTask);
+        this.setStartTime(start);
+    }
+
+    public Subtask(Subtask subtask) {
+        super(subtask);
+        this.epicId = subtask.epicId;
+    }
+
+    public Subtask(String name, String description, Status status,
+                   int epicId, Duration duration, LocalDateTime startTime) {
+        super(name, description, status);
+        this.epicId = epicId;
+        setDuration(duration);
+        setStartTime(startTime);
+    }
+
+    public Subtask(int id, String name, String description, Status status, int epicId) {
+        super(id, name, description, status);
         this.epicId = epicId;
     }
 
-    private int epicId; // Теперь здесь хранится ID эпика
-
-    public Subtask(String name, String description, int epicId) {
-        super(name, description);
-        this.epicId = epicId;
-        this.type = TaskType.SUBTASK;
+    public void setEpic(Epic epic) {
+        this.epicId = epic.getId();
     }
 
-    public int getEpicId() {
+    public int getIdEpic() {
         return epicId;
+    }
+
+    public void setIdEpicTask(int idEpicTask) {
+        this.epicId = idEpicTask;
     }
 
     @Override
     public String toString() {
-        return id + "," + type + "," + name + "," + status + "," + description + "," + epicId;
-    }
-
-    public static Subtask fromString(String value) {
-        String[] parts = value.split(",");
-        int id = Integer.parseInt(parts[0]);
-        String type = parts[1];
-        String name = parts[2];
-        Status status = Status.valueOf(parts[3]);
-        String description = parts[4];
-        int epicId = parts.length > 5 ? Integer.parseInt(parts[5]) : -1;
-        return new Subtask(name, description, epicId);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Subtask)) return false;
-        if (!super.equals(o)) return false;
-        Subtask subtask = (Subtask) o;
-        return epicId == subtask.epicId;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), epicId);
+        return "SubTask {" +
+                " id = " + getId() +
+                ", name = '" + getName() +
+                "', description='" + getDescription() +
+                "', status=" + getStatus() +
+                ", taskType = " + TaskType.SUBTASK +
+                ", duration=" + getDuration() +
+                ", startTime=" + getStartTime() +
+                '}';
     }
 }
