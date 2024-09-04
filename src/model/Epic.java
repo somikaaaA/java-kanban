@@ -1,80 +1,78 @@
 package model;
 
-import java.util.Arrays;
-import java.util.Objects;
-
-import controllers.InMemoryTaskManager;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    protected final List<Integer> subtaskIds = new ArrayList<>();
-    //private int numberOfSubtasks;
+    private LocalDateTime endTime;
+    private List<Integer> subtasks;
 
-    public Epic(String name, String description, List<String> subtaskIds) {
-        super(name, description);
-        this.type = TaskType.EPIC;
+    public Epic(String nameTask, String descriptionTask) {
+        super(0, nameTask, descriptionTask, Status.NEW);
+        this.endTime = LocalDateTime.now();
+        this.subtasks = new ArrayList<>();
     }
 
-    public void addSubtaskId(int subtaskId) {
-        subtaskIds.add(subtaskId);
+    public Epic(int id, String name, String description, Status status, List<Integer> subtasks) {
+        super(id, name, description, status);
+        this.subtasks = new ArrayList<>(subtasks);
+        this.endTime = LocalDateTime.now();
     }
 
-    public void cleanSubtaskIds() {
-        subtaskIds.clear();
+    public Epic(int id, String name, String description,
+                Status status, List<Integer> subtasks, LocalDateTime start,
+                Duration durationTask, LocalDateTime endTime) {
+        super(id, name, description, status, start, durationTask);
+        this.endTime = endTime;
+        this.subtasks = subtasks;
     }
 
-    public void updateEpicStatus() {
-        boolean allDone = true;
-        for (int subtaskId : subtaskIds) {
-            Subtask subtask = InMemoryTaskManager.getSubtaskById(subtaskId); // Использование статического метода
-            if (subtask != null && subtask.getStatus() != Status.DONE) {
-                allDone = false;
-                break;
-            }
-        }
-
-        if (allDone) {
-            setStatus(Status.DONE);
-        } else {
-            setStatus(Status.IN_PROGRESS);
-        }
+    public Epic(Epic epic) {
+        super(epic);
+        this.subtasks = epic.subtasks;
+        this.endTime = epic.endTime;
     }
 
-    // Метод для получения списка ID подзадач
-    public List<Integer> getSubtaskIds() {
-        return new ArrayList<>(subtaskIds); // Возвращаем копию списка, чтобы избежать внешнего изменения исходного списка
+    public List<Integer> getSubtasks() {
+        return subtasks;
+    }
+
+    public void setSubtasks(List<Integer> subtasks) {
+        this.subtasks = subtasks;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public void removeSubtask(int id) {
+        subtasks.remove(Integer.valueOf(id));
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(super.toString());
-        sb.append(",").append(subtaskIds.size());
+        StringBuilder sb = new StringBuilder();
+        sb.append(getId()).append(",")
+                .append(TaskType.EPIC).append(",")
+                .append(getName()).append(",")
+                .append(getStatus()).append(",")
+                .append(getDescription()).append(",");
+
+        List<Integer> subtaskIds = getSubtasks();
+        if (!subtaskIds.isEmpty()) {
+            boolean isFirst = true;
+            for (Integer subTaskId : subtaskIds) {
+                if (isFirst) {
+                    sb.append(subTaskId);
+                    isFirst = false;
+                } else {
+                    sb.append(",").append(subTaskId);
+                }
+            }
+        }
+
         return sb.toString();
-    }
-  
-    public static Epic fromString(String value) {
-        String[] parts = value.split(",");
-        int id = Integer.parseInt(parts[0]);
-        String type = parts[1];
-        String name = parts[2];
-        Status status = Status.valueOf(parts[3]);
-        String description = parts[4];
-        List<String> subtaskIds = Arrays.asList(parts.length > 5 ? parts[5].split(",") : new String[]{});
-        return new Epic(name, description, subtaskIds);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Epic)) return false;
-        if (!super.equals(o)) return false;
-        Epic epic = (Epic) o;
-        return Objects.equals(subtaskIds, epic.subtaskIds);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), subtaskIds);
     }
 }

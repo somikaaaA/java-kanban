@@ -1,56 +1,43 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
 import model.Epic;
 import model.Subtask;
 import model.Task;
 
-import java.util.ArrayList;
-
 public interface TaskManager {
-    int addNewTask(Task task);
+    List<Task> getHistory();
 
-    int addNewEpic(Epic epic);
-
-    Integer addNewSubtask(Subtask subtask);
-
-    // Получение списка всех задач
     ArrayList<Task> getTasks();
 
-    ArrayList<Subtask> getSubtasks();
+    ArrayList<Task> getEpics();
 
-    ArrayList<Epic> getEpics();
+    ArrayList<Task> getSubtasks();
 
-    // Удаление всех задач
-    void deleteTasks();
+    int addTask(Task task);
 
-    void deleteAllEpicsAndSubtasks();
+    int addEpic(Epic epic);
 
-    void deleteSubtasks();
+    int addSubTask(Subtask subtask);
 
-    // Получение по идентификатору
-    Task getTask(int id);
+    Task getTask(int idTask);
 
-    Task getSubtask(int id);
+    Epic getEpic(int idTask);
 
-    Task getEpic(int id);
+    Subtask getSubTask(int idTask);
 
-    // Обновление
-    void updateTask(Task updatedTask);
+    void updateEpic(Epic epic);
 
-    // Удаление по идентификатору
-    void deleteTaskById(int id);
+    void updateSubtask(Subtask subTask);
 
-    void deleteSubtaskById(int id);
+    void updateTask(Task task);
 
-    void deleteEpicById(int id);
+    void deleteTask(int idTask);
 
-    // Получение списка всех подзадач определенного эпика
-    ArrayList<Subtask> getEpicSubtasks(int epicId);
+    void deleteEpic(int idTask);
 
-    void updateEpicStatus(int epicId);
+    void deleteSubtask(int id);
 
-    //получение истории просмотров
-    ArrayList<Task> getHistory();
-
-    boolean isSelfEpic(Subtask subtask);
+    List<Subtask> getTasks(int epicId);
 }

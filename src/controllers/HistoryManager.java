@@ -1,8 +1,7 @@
 package controllers;
 
-import model.Task;
-
 import java.util.List;
+import model.Task;
 
 public interface HistoryManager {
     void add(Task task);
@@ -10,4 +9,4 @@ public interface HistoryManager {
     void remove(int id);
 
     List<Task> getHistory();
-  }
+}
