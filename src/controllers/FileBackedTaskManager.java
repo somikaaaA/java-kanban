@@ -115,7 +115,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 writer.newLine();
             }
 
-            for (Map.Entry<Integer, Subtask> entry : subTasks.entrySet()) {
+            for (Map.Entry<Integer, Subtask> entry : subtasks.entrySet()) {
                 final Task task = entry.getValue();
                 writer.write(toString(task));
                 writer.newLine();
@@ -186,7 +186,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
                 taskManager.addAnyTask(task);
             }
-            for (Map.Entry<Integer, Subtask> e : taskManager.subTasks.entrySet()) {
+            for (Map.Entry<Integer, Subtask> e : taskManager.subtasks.entrySet()) {
                 final Subtask subtask = e.getValue();
                 final Epic epic = taskManager.epics.get(subtask.getIdEpic());
                 epic.getSubtasks().add(subtask.getId());
@@ -205,7 +205,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 tasks.put(id, task);
                 break;
             case SUBTASK:
-                subTasks.put(id, (Subtask) task);
+                subtasks.put(id, (Subtask) task);
                 break;
             case EPIC:
                 epics.put(id, (Epic) task);

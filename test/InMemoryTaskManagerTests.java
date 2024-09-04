@@ -36,7 +36,7 @@ public class InMemoryTaskManagerTests {
 
         assertEquals(2, manager.tasks.size());
         assertEquals(1, manager.epics.size());
-        assertEquals(1, manager.subTasks.size());
+        assertEquals(1, manager.subtasks.size());
 
         assertSame(task1, manager.getTask(5));
         assertSame(task2, manager.getTask(6));

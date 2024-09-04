@@ -40,7 +40,7 @@ abstract class TaskManagerTest<T extends TaskManager>{
 
     @Test
     void testGetSubTasks() {
-        ArrayList<Task> subtasks = manager.getSubTasks();
+        ArrayList<Task> subtasks = manager.getSubtasks();
         assertNotNull(subtasks, "Подзадачи не должны быть пустыми");
         assertFalse(subtasks.isEmpty(), "Подзадачи не должны быть пустыми");
     }

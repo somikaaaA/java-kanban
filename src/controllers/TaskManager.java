@@ -13,7 +13,7 @@ public interface TaskManager {
 
     ArrayList<Task> getEpics();
 
-    ArrayList<Task> getSubTasks();
+    ArrayList<Task> getSubtasks();
 
     int addTask(Task task);
 

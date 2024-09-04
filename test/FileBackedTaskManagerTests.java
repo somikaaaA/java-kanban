@@ -31,7 +31,7 @@ public class FileBackedTaskManagerTests {
 
         assertEquals(Collections.emptyMap(), manager.tasks);
         assertEquals(Collections.emptyMap(), manager.epics);
-        assertEquals(Collections.emptyMap(), manager.subTasks);
+        assertEquals(Collections.emptyMap(), manager.subtasks);
     }
 
     @Test
