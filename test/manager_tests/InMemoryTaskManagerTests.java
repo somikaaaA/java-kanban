@@ -1,3 +1,5 @@
+package manager_tests;
+
 import controllers.InMemoryTaskManager;
 import model.Epic;
 import model.Status;

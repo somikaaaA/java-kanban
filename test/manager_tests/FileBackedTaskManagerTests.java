@@ -1,3 +1,5 @@
+package manager_tests;
+
 import model.Status;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

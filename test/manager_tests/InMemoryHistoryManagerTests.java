@@ -1,3 +1,5 @@
+package manager_tests;
+
 import controllers.HistoryManager;
 import controllers.Managers;
 import model.Status;

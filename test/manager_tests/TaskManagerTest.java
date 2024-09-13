@@ -1,3 +1,5 @@
+package manager_tests;
+
 import controllers.TaskManager;
 import model.Epic;
 import model.Status;
