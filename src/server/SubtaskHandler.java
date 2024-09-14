@@ -3,15 +3,13 @@ package server;
 import com.google.gson.JsonSyntaxException;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import controllers.TaskManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
-import controllers.TaskManager;
 import model.Subtask;
 
 public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
-    String response;
-
     public SubtaskHandler(TaskManager taskManager) {
         super(taskManager);
     }
@@ -35,6 +33,7 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
     }
 
     private void getSubTask(HttpExchange exchange) throws IOException {
+        String response;
         if (exchange.getRequestURI().getQuery() == null) {
             response = gson.toJson(taskManager.getSubtasks());
             writeResponse(exchange, response, 200);
@@ -74,7 +73,6 @@ public class SubtaskHandler extends BaseHttpHandler implements HttpHandler {
             }
             taskManager.updateSubtask(subTask);
             writeResponse(exchange, "Подзадача обновлена", 200);
-
         } catch (JsonSyntaxException e) {
             writeResponse(exchange, "Получен некорректный JSON", 400);
         } catch (Exception exp) {

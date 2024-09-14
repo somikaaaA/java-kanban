@@ -1,18 +1,14 @@
 package server;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
+import controllers.Managers;
 import controllers.TaskManager;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.Optional;
-import server.adapters.DurationAdapter;
-import server.adapters.LocalDateTimeAdapter;
 
 public class BaseHttpHandler {
     public static final Charset UTF = StandardCharsets.UTF_8;
@@ -20,12 +16,8 @@ public class BaseHttpHandler {
     public TaskManager taskManager;
 
     public BaseHttpHandler(TaskManager taskManager) {
-        this.gson = new GsonBuilder().setPrettyPrinting()
-                .serializeNulls()
-                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-                .registerTypeAdapter(Duration.class, new DurationAdapter())
-                .create();
         this.taskManager = taskManager;
+        this.gson = Managers.createGson();
     }
 
     public void writeResponse(HttpExchange exchange,

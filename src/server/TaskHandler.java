@@ -3,6 +3,7 @@ package server;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import controllers.TaskManager;
+import exceptions.ServerSaveException;
 import java.io.IOException;
 import java.io.InputStream;
 import model.Task;
@@ -19,7 +20,6 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         String method = exchange.getRequestMethod();
         String path = String.valueOf(exchange.getRequestURI());
 
-        System.out.println("Обрабатывается запрос " + path + " с методом " + method);
         switch (method) {
             case "GET":
                 getTask(exchange);
@@ -43,7 +43,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
         }
 
         if (getTaskId(exchange).isEmpty()) {
-            writeResponse(exchange, "Некорректный идентификатор " + getTaskId(exchange), 400);
+            writeResponse(exchange, "Не найден " + getTaskId(exchange), 404);
             return;
         }
         int id = getTaskId(exchange).get();
@@ -69,9 +69,8 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
             }
             taskManager.updateTask(task);
             writeResponse(exchange, "Задача обновлена", 200);
-
         } catch (IOException e) {
-            System.out.println("Ошибка добавления");
+            throw new ServerSaveException("Ошибка добавления", e);
         }
     }
 
