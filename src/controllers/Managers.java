@@ -1,8 +1,14 @@
 package controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import server.adapters.DurationAdapter;
+import server.adapters.LocalDateTimeAdapter;
 
 public class Managers {
     public static TaskManager getDefault() {
@@ -24,5 +30,15 @@ public class Managers {
 
     public static InMemoryHistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
+    }
+
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting()
+            .serializeNulls()
+            .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .registerTypeAdapter(Duration.class, new DurationAdapter())
+            .create();
+
+    public static Gson createGson() {
+        return GSON;
     }
 }

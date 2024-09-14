@@ -20,7 +20,7 @@ import model.TaskType;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
-    
+
     public FileBackedTaskManager(File file) {
         this.file = file;
     }
