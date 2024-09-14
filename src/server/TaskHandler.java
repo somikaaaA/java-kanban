@@ -18,7 +18,6 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         String method = exchange.getRequestMethod();
-        String path = String.valueOf(exchange.getRequestURI());
 
         switch (method) {
             case "GET":
